@@ -1,9 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
+import datetime
+
 # Create your models here.
 class Question(models.Model):
     question=models.CharField(max_length=550)
     day=models.IntegerField()
+    level_no=models.IntegerField()
     answer=models.CharField(max_length=100)
     audiofield=models.FileField(upload_to='media',blank=True)
     image=models.ImageField(upload_to='media/images',blank=True)
@@ -27,4 +30,14 @@ class UserScore(models.Model):
     class Meta:
         ordering =['score']
 
-    
+class config(models.Model):
+    current_day=models.IntegerField()
+    q_no=models.IntegerField()
+    quiz_active=models.BooleanField()
+    quiz_start=models.DateTimeField()
+    quiz_endtime=models.DateTimeField()
+
+    def quiz_active(self):
+        current_time=datetime.datetime()
+        if current_time==self.quiz_endtime:
+            self.quiz_active=False
