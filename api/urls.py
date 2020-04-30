@@ -8,5 +8,6 @@ router = routers.DefaultRouter()
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('googlelogin',views.GoogleLogin.as_view(),name='gogglelogin'),
+    path('googlelogin',views.GoogleLogin.as_view(),name='googlelogin'),
+    path('leaderboard',views.leaderboard,name='leaderboard'),
 ]

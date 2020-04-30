@@ -24,11 +24,22 @@ class Answer(models.Model):
 
 class UserScore(models.Model):
     user=models.ForeignKey(to=User,on_delete=models.CASCADE)
+    name=models.CharField(max_length=55,null=True)
     score=models.IntegerField(default=0)
+    rank=models.IntegerField(null=True)
     last_modified=models.DateTimeField(auto_now=True)
     
     class Meta:
-        ordering =['score']
+        ordering =['-score','last_modified']
+
+    def leaderboard(self):
+        players=self.objects.all()
+        rank=1
+        for player in players:
+            player.rank=rank
+            rank +=1
+        return players
+
 
 class config(models.Model):
     current_day=models.IntegerField()

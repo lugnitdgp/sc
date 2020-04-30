@@ -5,12 +5,24 @@ from rest_framework.utils import json
 from rest_framework.views import APIView
 from rest_framework.response import Response
 import requests
+from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
+from rest_framework.decorators import api_view, throttle_classes,permission_classes,authentication_classes
+from rest_framework.permissions import IsAuthenticated
+from .serializers import LeaderboardSerializer
+from quiz.models import UserScore
+
 # Create your views here.
 
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def leaderboard(request):
+    players=UserScore.leaderboard(UserScore)
+    serializer=LeaderboardSerializer(players,many=True)
+    return Response(serializer.data)
 
 class GoogleLogin(APIView):
     def post(self, request):
