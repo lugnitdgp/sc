@@ -46,18 +46,10 @@ class UserScore(models.Model):
             rank +=1
         return players
 
-    def new_score(self,player):
+    def new_score(player):
         player.score+=10
         player.save()
 
-class configManager(models.Manager):
-    def create(self,current_day,q_no,quiz_active,quiz_start,quiz_endtime):
-        config=self.model(current_day=current_day,q_no=q_no,quiz_active=quiz_active,quiz_start=quiz_start,quiz_endtime=quiz_endtime)
-        config.save()
-        players=UserScore.objects.all()
-        for player in players:
-            player.current_question=1
-        return config
 
 class config(models.Model):
     current_day=models.IntegerField()
@@ -72,4 +64,9 @@ class config(models.Model):
         if current_time==curr_config.quiz_endtime:
             curr_config.quiz_active=False
     
-    object=configManager()
+    def save(self, force_insert=False, force_update=False, *args, **kwargs):
+        players=UserScore.objects.all()
+        for player in players:
+            player.current_question=1
+            player.save()
+        super(config, self).save(force_insert, force_update, *args, **kwargs)
