@@ -8,7 +8,7 @@ class Question(models.Model):
     day=models.IntegerField()
     question_no=models.IntegerField()
     answer=models.CharField(max_length=100)
-    audiofield=models.FileField(upload_to='media',blank=True)
+    audio=models.FileField(upload_to='media/audios',blank=True)
     image=models.ImageField(upload_to='media/images',blank=True)
     hint=models.CharField(max_length=555,default='na')
     def __str__(self):
@@ -18,15 +18,21 @@ class Question(models.Model):
         ordering=['day','question_no']
 
     def check_ans(self,answer,question):
-        if question.answer==answer:
-            return True
-
+        answers=question.answer.split(",")
+        for ans in answers:
+            if answer==ans:
+                return True
+        return False
+    def get_next_question(self,day,qno):
+        question=self.objects.filter(day=day,question_no=qno)
+        return question
            
 class UserScore(models.Model):
     user=models.ForeignKey(to=User,on_delete=models.CASCADE)
     name=models.CharField(max_length=55,null=True)
     score=models.IntegerField(default=0)
     rank=models.IntegerField(null=True)
+    current_question=models.IntegerField()
     last_modified=models.DateTimeField(auto_now=True)
     
     class Meta:
@@ -44,15 +50,26 @@ class UserScore(models.Model):
         player.score+=10
         player.save()
 
+class configManager(models.Manager):
+    def create(self,current_day,q_no,quiz_active,quiz_start,quiz_endtime):
+        config=self.model(current_day=current_day,q_no=q_no,quiz_active=quiz_active,quiz_start=quiz_start,quiz_endtime=quiz_endtime)
+        config.save()
+        players=UserScore.objects.all()
+        for player in players:
+            player.current_question=1
+        return config
 
 class config(models.Model):
     current_day=models.IntegerField()
     q_no=models.IntegerField()
-    quiz_active=models.BooleanField()
+    quiz_active=models.BooleanField(default=True)
     quiz_start=models.DateTimeField()
     quiz_endtime=models.DateTimeField()
 
     def quiz_active(self):
+        curr_config=self.objects.all()
         current_time=datetime.datetime()
-        if current_time==self.quiz_endtime:
-            self.quiz_active=False
+        if current_time==curr_config.quiz_endtime:
+            curr_config.quiz_active=False
+    
+    object=configManager()

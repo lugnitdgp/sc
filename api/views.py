@@ -10,8 +10,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view, throttle_classes,permission_classes,authentication_classes
 from rest_framework.permissions import IsAuthenticated
-from .serializers import LeaderboardSerializer
-from quiz.models import UserScore
+from .serializers import LeaderboardSerializer,AnswerSerializer
+from quiz.models import UserScore,config
 
 # Create your views here.
 
@@ -24,6 +24,14 @@ def leaderboard(request):
     serializer=LeaderboardSerializer(players,many=True)
     return Response(serializer.data)
 
+class Answer(APIView):
+    permission_classes=(IsAuthenticated)
+    serializer_class=AnswerSerializer
+    
+    def post(self,request):
+        day=config.objects.all().current_day
+        q_no=1
+        
 class GoogleLogin(APIView):
     def post(self, request):
         payload = {'access_token': request.data.get("token")}  # validate the token
