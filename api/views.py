@@ -10,6 +10,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view, throttle_classes,permission_classes,authentication_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
 from .serializers import LeaderboardSerializer,AnswerSerializer
 from quiz.models import UserScore,config
 
@@ -29,9 +30,15 @@ class Answer(APIView):
     serializer_class=AnswerSerializer
     
     def post(self,request):
-        day=config.objects.all().current_day
-        q_no=1
-        
+        player=UserScore.objects.filter(user=request.user)
+        context={"player":player}
+        serializer = self.serializer_class(data=request.data,context=context)
+        serializer.is_valid(raise_exception=True)
+        response={
+            'status_code':status.HTTP_200_OK,
+            'result':serializer.data['result'],
+        }
+        return Response(response)
 class GoogleLogin(APIView):
     def post(self, request):
         payload = {'access_token': request.data.get("token")}  # validate the token

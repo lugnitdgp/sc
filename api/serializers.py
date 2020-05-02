@@ -19,8 +19,10 @@ class AnswerSerializer(serializers.Serializer):
 
     answer=serializers.CharField(max_length=255)
 
-    def validate(self,data,player): 
+    def validate(self,data): 
         answer=data.get("answer",None)
+        player=self.context.get("player")
+        player=data.get("player")
         active=config.quiz_active(config)
         if active:
           try:
