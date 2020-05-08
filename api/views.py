@@ -53,12 +53,14 @@ class GoogleLogin(APIView):
         try:
             user = User.objects.get(email=data['email'])
         except User.DoesNotExist:
-            user = User()
+            user = User()            
             user.username = data['name']
             # provider random default password
             user.password = make_password(BaseUserManager().make_random_password())
             user.email = data['email']
             user.save()
+            score = UserScore(name=user.email, current_question = 1)
+            score.save()
 
         token = RefreshToken.for_user(user)  # generate token without username & password
         response = {}
