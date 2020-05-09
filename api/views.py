@@ -26,7 +26,7 @@ def leaderboard(request):
     return Response(serializer.data)
 
 class Answer(APIView):
-    permission_classes=(IsAuthenticated)
+    permission_classes=(IsAuthenticated,)
     serializer_class=AnswerSerializer
     
     def post(self,request):
@@ -65,4 +65,4 @@ class GoogleLogin(APIView):
         response['username'] = user.username
         response['access_token'] = str(token.access_token)
         response['refresh_token'] = str(token)
-        return Response(response)
+        return Response(response
