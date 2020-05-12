@@ -18,7 +18,9 @@ class Question(models.Model):
         ordering=['day','question_no']
 
     def check_ans(self,answer,question):
-        answers=question.answer.split(",")
+        string = question.answer.lower()
+        answer = answer.lower()
+        answers=string.split(",")
         for ans in answers:
             if answer==ans:
                 return True
