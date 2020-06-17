@@ -41,9 +41,14 @@ INSTALLED_APPS = [
     'account',
     'api',
     'rest_framework'
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.BrokenLinkEmailsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -77,6 +82,12 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'screencast.wsgi.application'
+CORS_ORIGIN_ALLOW_ALL = False
+
+CORS_ORIGIN_WHITELIST = (
+    'http//:localhost:8000',
+    # add your frontend server site here
+)
 
 
 # Database
