@@ -67,4 +67,4 @@ class GoogleLogin(APIView):
         response['username'] = user.username
         response['access_token'] = str(token.access_token)
         response['refresh_token'] = str(token)
-        return Response(response
+        return Response(response)
