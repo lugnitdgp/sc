@@ -5,15 +5,20 @@ from rest_framework.utils import json
 from rest_framework.views import APIView
 from rest_framework.response import Response
 import requests
+from django.http import JsonResponse
+from rest_framework import generics, permissions, status, views
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view, throttle_classes,permission_classes,authentication_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from .serializers import LeaderboardSerializer,AnswerSerializer
+from .serializers import LeaderboardSerializer,AnswerSerializer,SocialSerializer
 from quiz.models import UserScore,config
-
+from requests.exceptions import HTTPError
+from social_django.utils import load_strategy, load_backend
+from social_core.backends.oauth import BaseOAuth2
+from social_core.exceptions import MissingBackend, AuthTokenError, AuthForbidden
 # Create your views here.
 
 
@@ -59,7 +64,7 @@ class GoogleLogin(APIView):
             user.password = make_password(BaseUserManager().make_random_password())
             user.email = data['email']
             user.save()
-            score = UserScore(name=user.email, current_question = 1)
+            score = UserScore(user=user,name=user.email, current_question = 1)
             score.save()
 
         token = RefreshToken.for_user(user)  # generate token without username & password
@@ -68,3 +73,4 @@ class GoogleLogin(APIView):
         response['access_token'] = str(token.access_token)
         response['refresh_token'] = str(token)
         return Response(response)
+
