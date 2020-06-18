@@ -75,5 +75,5 @@ class GoogleLogin(APIView):
         return Response(response)
 
 class questionview(APIView):
-    permission_classes=(isAuthenticated,)
+    permission_classes=(IsAuthenticated,)
 
