@@ -25,7 +25,7 @@ SECRET_KEY = 'k(o5900674725b3)1w5(lgz$9ckubfetysox12!(3h4=73+@^&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['screencast2020.azurewebsites.net','127.0.0.1']
+ALLOWED_HOSTS = ['screencast2020.azurewebsites.net','127.0.0.1','.herokuapp.com']
 
 
 # Application definition
