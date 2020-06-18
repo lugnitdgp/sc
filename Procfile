@@ -1,1 +1,1 @@
-web: gunicorn screencast.wsgi
+web: gunicorn screencast --log-file -
