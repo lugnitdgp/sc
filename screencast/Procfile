@@ -1,1 +1,1 @@
-web gunicorn screencast:screencast
+web: gunicorn screencast.wsgi
