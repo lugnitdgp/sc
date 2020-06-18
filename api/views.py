@@ -74,3 +74,6 @@ class GoogleLogin(APIView):
         response['refresh_token'] = str(token)
         return Response(response)
 
+class questionview(APIView):
+    permission_classes=(isAuthenticated,)
+
