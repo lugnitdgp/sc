@@ -46,20 +46,23 @@ class Answer(APIView):
         player=UserScore.objects.filter(user=request.user)[0]
         print(player.name)
         answer=request.data.get("answer",None)
-        #player=self.context.get("player")
         print(player)
-        #player=data.get("player")
-        #active=config.quiz_active(config)
-        day=config.objects.all()[0].current_day
-        curr_question=player.current_question
-        question=Question.objects.filter(day=day,question_no=curr_question)
-        result=Question.check_ans(Question,answer,question)
-        if result:
-           player.new_score(player)
-        response={
-            'status_code':status.HTTP_200_OK,
-            'result':result
-        }
+        active=config.quiz_active(config)
+        if active:
+            day=config.objects.all()[0].current_day
+            curr_question=player.current_question
+            question=Question.objects.filter(day=day,question_no=curr_question)
+            result=Question.check_ans(Question,answer,question)
+            if result:
+               player.new_score(player)
+            response={
+                'status_code':status.HTTP_200_OK,
+                'result':result
+            }
+        else:
+           response= {
+                "error":"quiz has ended"
+            }
         return Response(response)
 class GoogleLogin(APIView):
     def post(self, request):
@@ -91,6 +94,43 @@ class GoogleLogin(APIView):
         response['refresh_token'] = str(token)
         return Response(response)
 
-class questionview(APIView):
-    permission_classes=(IsAuthenticated,)
 
+class facebooklogin(APIView):
+    
+    def post(self,request):
+        accesstoken=request.data.get('accesstoken')
+        expiration_time=request.data.get('expiration_time')
+        userID=request.data.get('userID')
+        if(int(expiration_time) < int(time.time())):
+            content= {"status": 404}
+            return Response(content)
+        else:
+            url = "https://graph.facebook.com/{}".format(userID)
+            parameters = {
+                'fields': 'name,email,picture',
+                'access_token': accesstoken
+            }
+            idInfo = r.get(url=url, params=parameters).json()
+
+            email= idInfo['email'],
+            username= idInfo['email'],
+            image= idInfo['picture']['data']['url'],
+            try:
+                user = User.objects.get(email=data['email'])
+            except User.DoesNotExist:
+                user = User()
+                user.username = username
+                # provider random default password
+                user.password = make_password(BaseUserManager().make_random_password())
+                user.email = email
+                user.save()
+                score = UserScore(user=user,name=user.email, current_question = 1)
+                score.save()
+
+        token = RefreshToken.for_user(user)  # generate token without username & password
+        response = {}
+        response['username'] = user.username
+        response['access_token'] = str(token.access_token)
+        response['refresh_token'] = str(token)
+        return Response(response)
+        

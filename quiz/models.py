@@ -62,10 +62,10 @@ class config(models.Model):
     quiz_endtime=models.DateTimeField()
 
     def quiz_active(self):
-        curr_config=self.objects.all()
+        curr_config=self.objects.all()[0]
         current_time=datetime.datetime.now()    
         if current_time==curr_config[0].quiz_endtime:
-            curr_config[0].quiz_active=False
+            curr_config.quiz_active=False
     
     def save(self, force_insert=False, force_update=False, *args, **kwargs):
         players=UserScore.objects.all()
