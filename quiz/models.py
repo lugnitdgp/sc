@@ -18,7 +18,7 @@ class Question(models.Model):
         ordering=['day','question_no']
 
     def check_ans(self,answer,question):
-        string = question.answer.lower()
+        string = question[0].answer.lower()
         answer = answer.lower()
         answers=string.split(",")
         for ans in answers:
@@ -48,8 +48,9 @@ class UserScore(models.Model):
             rank +=1
         return players
 
-    def new_score(player):
+    def new_score(self,player):
         player.score+=10
+        player.current_question +=1
         player.save()
 
 
@@ -62,9 +63,9 @@ class config(models.Model):
 
     def quiz_active(self):
         curr_config=self.objects.all()
-        current_time=datetime.datetime()
-        if current_time==curr_config.quiz_endtime:
-            curr_config.quiz_active=False
+        current_time=datetime.datetime.now()    
+        if current_time==curr_config[0].quiz_endtime:
+            curr_config[0].quiz_active=False
     
     def save(self, force_insert=False, force_update=False, *args, **kwargs):
         players=UserScore.objects.all()

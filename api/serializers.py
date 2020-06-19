@@ -22,27 +22,19 @@ class AnswerSerializer(serializers.Serializer):
     def validate(self,data): 
         answer=data.get("answer",None)
         player=self.context.get("player")
-        player=data.get("player")
+        print(player)
+        #player=data.get("player")
         active=config.quiz_active(config)
-        if active:
-          try:
-              day=config.objects.all().current_day
-              curr_question=player.current_question
-              question=Question.objects.filter(day=day,question_no=curr_question)
-              result=Question.check_ans(Question,answer,question)
-              if result:
-                 player.new_score(player)
-          except:
-              raise serializers.ValidationError(
-                'wrong answer given'
-                )
-          return {
+        day=config.objects.all()[0].current_day
+        curr_question=player[0].current_question
+        question=Question.objects.filter(day=day,question_no=curr_question)
+        result=Question.check_ans(Question,answer,question)
+        if result:
+           player[0].new_score(player)
+        return {
                 "result":result
             }
-        else:
-            raise serializers.ValidationError(
-            'quiz has ended'
-        )
+        
 
 class SocialSerializer(serializers.Serializer):
     """

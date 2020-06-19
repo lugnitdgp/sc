@@ -14,7 +14,7 @@ from rest_framework.decorators import api_view, throttle_classes,permission_clas
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .serializers import LeaderboardSerializer,AnswerSerializer,SocialSerializer
-from quiz.models import UserScore,config
+from quiz.models import UserScore,config,Question
 from requests.exceptions import HTTPError
 from social_django.utils import load_strategy, load_backend
 from social_core.backends.oauth import BaseOAuth2
@@ -32,16 +32,24 @@ def leaderboard(request):
 
 class Answer(APIView):
     permission_classes=(IsAuthenticated,)
-    serializer_class=AnswerSerializer
     
     def post(self,request):
-        player=UserScore.objects.filter(user=request.user)
-        context={"player":player}
-        serializer = self.serializer_class(data=request.data,context=context)
-        serializer.is_valid(raise_exception=True)
+        player=UserScore.objects.filter(user=request.user)[0]
+        print(player.name)
+        answer=request.data.get("answer",None)
+        #player=self.context.get("player")
+        print(player)
+        #player=data.get("player")
+        #active=config.quiz_active(config)
+        day=config.objects.all()[0].current_day
+        curr_question=player.current_question
+        question=Question.objects.filter(day=day,question_no=curr_question)
+        result=Question.check_ans(Question,answer,question)
+        if result:
+           player.new_score(player)
         response={
             'status_code':status.HTTP_200_OK,
-            'result':serializer.data['result'],
+            'result':result
         }
         return Response(response)
 class GoogleLogin(APIView):
