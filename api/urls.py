@@ -15,5 +15,6 @@ urlpatterns = [
     path('leaderboard',views.leaderboard,name='leaderboard'),
     path('checkanswer',views.Answer.as_view(),name='check_answers'),
     #path('oauth/login/', views.SocialLoginView.as_view(),name='oauthlogin')
-    path('refresh',TokenRefreshView.as_view(),name='token_refresh')
+    path('refresh',TokenRefreshView.as_view(),name='token_refresh'),
+    path('question',views.getquestion.as_view(),name='question api'),
 ]

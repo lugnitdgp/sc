@@ -13,7 +13,7 @@ from django.contrib.auth.models import User
 from rest_framework.decorators import api_view, throttle_classes,permission_classes,authentication_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from .serializers import LeaderboardSerializer,AnswerSerializer,SocialSerializer
+from .serializers import LeaderboardSerializer,AnswerSerializer,SocialSerializer,QuestionSerializer
 from quiz.models import UserScore,config,Question
 from requests.exceptions import HTTPError
 from social_django.utils import load_strategy, load_backend
@@ -29,7 +29,16 @@ def leaderboard(request):
     players=UserScore.leaderboard(UserScore)
     serializer=LeaderboardSerializer(players,many=True)
     return Response(serializer.data)
+class getquestion(APIView):
+    permission_classes=(IsAuthenticated,)
 
+    def get(self,request):
+        player=UserScore.objects.filter(user=request.user)[0]
+        day=config.objects.all()[0].current_day
+        curr_question=player.current_question
+        question=Question.objects.filter(day=day,question_no=curr_question)[0]
+        serializer=QuestionSerializer(question)
+        return Response(serializer.data)
 class Answer(APIView):
     permission_classes=(IsAuthenticated,)
     
