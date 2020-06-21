@@ -38,6 +38,11 @@ class getquestion(APIView):
         if active:
             day=config.objects.all()[0].current_day
             curr_question=player.current_question
+            if curr_question>config.objects.all()[0].q_no:
+                response={
+                  "quiz_finished": True
+                }
+                return Response(response)
             question=Question.objects.filter(day=day,question_no=curr_question)[0]
             serializer=QuestionSerializer(question)
             return Response(serializer.data)
@@ -130,7 +135,7 @@ class facebooklogin(APIView):
             idInfo = r.get(url=url, params=parameters).json()
 
             email= idInfo['email'],
-            username= idInfo['email'],
+            username= idInfo['name'],
             image= idInfo['picture']['data']['url'],
             try:
                 user = User.objects.get(email=data['email'])
