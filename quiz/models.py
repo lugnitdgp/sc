@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 import datetime
+import pytz
 
+utc=pytz.UTC
 # Create your models here.
 class Question(models.Model):
     question=models.CharField(max_length=550)
@@ -63,10 +65,15 @@ class config(models.Model):
 
     def quiz_active(self):
         curr_config=self.objects.all()[0]
-        current_time=datetime.datetime.now()    
-        if current_time==curr_config[0].quiz_endtime:
+        current_time=datetime.datetime.now().replace(tzinfo=utc)  
+        quiz_endtime=curr_config.quiz_endtime.replace(tzinfo=utc)
+        print(curr_config.quiz_endtime)
+        print(current_time)  
+        if current_time>quiz_endtime:
             curr_config.quiz_active=False
-    
+            print(current_time>quiz_endtime)
+            return False
+        return True
     def save(self, force_insert=False, force_update=False, *args, **kwargs):
         players=UserScore.objects.all()
         for player in players:

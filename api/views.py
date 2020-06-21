@@ -34,11 +34,19 @@ class getquestion(APIView):
 
     def get(self,request):
         player=UserScore.objects.filter(user=request.user)[0]
-        day=config.objects.all()[0].current_day
-        curr_question=player.current_question
-        question=Question.objects.filter(day=day,question_no=curr_question)[0]
-        serializer=QuestionSerializer(question)
-        return Response(serializer.data)
+        active=config.quiz_active(config)
+        if active:
+            day=config.objects.all()[0].current_day
+            curr_question=player.current_question
+            question=Question.objects.filter(day=day,question_no=curr_question)[0]
+            serializer=QuestionSerializer(question)
+            return Response(serializer.data)
+        else:
+            response= {
+                "error":"quiz has ended"
+            }
+            return Response(response)
+
 class Answer(APIView):
     permission_classes=(IsAuthenticated,)
     
