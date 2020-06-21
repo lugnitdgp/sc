@@ -71,9 +71,9 @@ class Answer(APIView):
                 return Response(response)
             question=Question.objects.filter(day=day,question_no=curr_question)
             result=Question.check_ans(Question,answer,question)
+            quiz_ended=False
             if result:
                player.new_score(player)
-               quiz_ended=False
                if curr_question==config.objects.all()[0].q_no:
                    quiz_ended=True
             response={
