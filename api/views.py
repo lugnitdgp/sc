@@ -74,7 +74,7 @@ class Answer(APIView):
             response={
                     'status_code':status.HTTP_200_OK,
                     'result':result,
-                    'quiz_ended':quiz_ended
+                    'quiz_finished':quiz_ended
                 }
         else:
            response= {
