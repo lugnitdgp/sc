@@ -59,14 +59,23 @@ class Answer(APIView):
         if active:
             day=config.objects.all()[0].current_day
             curr_question=player.current_question
+            if curr_question>config.objects.all()[0].q_no:
+                response={
+                  "quiz_finished": True
+                }
+                return Response(response)
             question=Question.objects.filter(day=day,question_no=curr_question)
             result=Question.check_ans(Question,answer,question)
             if result:
                player.new_score(player)
+               quiz_ended=False
+               if curr_question==config.objects.all()[0].q_no:
+                   quiz_ended=True
             response={
-                'status_code':status.HTTP_200_OK,
-                'result':result
-            }
+                    'status_code':status.HTTP_200_OK,
+                    'result':result,
+                    'quiz_ended':quiz_ended
+                }
         else:
            response= {
                 "error":"quiz has ended"
