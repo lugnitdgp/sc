@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'k(o5900674725b3)1w5(lgz$9ckubfetysox12!(3h4=73+@^&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['screencast20.azurewebsites.net','127.0.0.1','.herokuapp.com','.pythonanywhere.com']
 
@@ -122,6 +122,19 @@ DATABASES = {
         }
     }
 }
+ #DATABASES = {
+  #  'default': {
+   #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #    'NAME': 'd8s04nkvqhp0h4',
+     #   'USER': 'sqevffmxfxtbux',
+      #  'PASSWORD': 'b654e6b6714686cffbd044547270e7c70c641b234fb37ec373b6d9f399ba9402',
+       # 'HOST': 'ec2-34-224-229-81.compute-1.amazonaws.com',
+        
+       # 'OPTIONS': {
+            #'sslmode': 'require',
+      #  }
+   # }
+#}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -200,8 +213,8 @@ SOCIAL_AUTH_PIPELINE = (
 'social_core.pipeline.user.user_details', )
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
 
