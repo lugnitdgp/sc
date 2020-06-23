@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'k(o5900674725b3)1w5(lgz$9ckubfetysox12!(3h4=73+@^&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['screencast20.azurewebsites.net','127.0.0.1','.herokuapp.com','.pythonanywhere.com']
 
