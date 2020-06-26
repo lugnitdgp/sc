@@ -22,6 +22,7 @@ class Question(models.Model):
     def check_ans(self,answer,question):
         string = question[0].answer.lower()
         answer = answer.lower()
+        answer=answer.replace(" ","")
         answers=string.split(",")
         for ans in answers:
             if answer==ans:
