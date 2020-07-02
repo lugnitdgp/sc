@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 from datetime import timedelta
+import django_heroku
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -109,17 +110,15 @@ CORS_ORIGIN_WHITELIST = (
         #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
    # }
 #}
-DATABASES = {
+
+DATABASES = {         # GALAXYZPJ'S LOCAL INSTANCE
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'screencast',
-        'USER': 'screencastadmin@screencast2020',
-        'PASSWORD': 'screencast2020!',
-        'HOST': 'screencast2020.postgres.database.azure.com',
-        
-        'OPTIONS': {
-            #'sslmode': 'require',
-        }
+        'USER': 'postgres',
+        'PASSWORD': '1234',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
  #DATABASES = {
@@ -231,3 +230,5 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=30),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
+
+django_heroku.settings(locals())
