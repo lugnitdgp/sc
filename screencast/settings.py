@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'account',
     'api',
     'rest_framework',
-    #'corsheaders',
+    'corsheaders',
     'rest_framework_social_oauth2',
     'oauth2_provider',
     'social_django',
@@ -95,11 +95,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'screencast.wsgi.application'
 CORS_ORIGIN_ALLOW_ALL = True
 
-CORS_ORIGIN_WHITELIST = (
-    'http//:localhost:8000',
-    # add your frontend server site here
-)
-
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -116,7 +111,7 @@ DATABASES = {         # GALAXYZPJ'S LOCAL INSTANCE
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'screencast',
         'USER': 'postgres',
-        'PASSWORD': '1234',
+        'PASSWORD': 'ramiz',
         'HOST': 'localhost',
         'PORT': '5432',
     }

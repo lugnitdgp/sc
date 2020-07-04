@@ -76,8 +76,9 @@ class config(models.Model):
             return False
         return True
     def save(self, force_insert=False, force_update=False, *args, **kwargs):
-        players=UserScore.objects.all()
-        for player in players:
-            player.current_question=1
-            player.save()
-        super(config, self).save(force_insert, force_update, *args, **kwargs)
+        if not self.pk:
+            players=UserScore.objects.all()
+            for player in players:
+                player.current_question=1
+                player.save()
+            super(config, self).save(force_insert, force_update, *args, **kwargs)
