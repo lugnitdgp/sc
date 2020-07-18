@@ -141,7 +141,7 @@ class facebooklogin(APIView):
             username= idInfo['name'],
             image= idInfo['picture']['data']['url'],
             try:
-                user = User.objects.get(email=data['email'])
+                user = User.objects.get(email=email)
             except User.DoesNotExist:
                 user = User()
                 user.username = username
