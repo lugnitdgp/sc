@@ -109,7 +109,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 DATABASES = {         # GALAXYZPJ'S LOCAL INSTANCE
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'screencast',
+        'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'ramiz',
         'HOST': 'localhost',

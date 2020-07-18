@@ -1,0 +1,23 @@
+version: '3'
+    
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  web:
+    build: .
+    command: gunicorn screencast.wsgi:application --bind 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - migration
+
+  migration:
+    build: .
+    command: python manage.py migrate --noinput
+    depends_on: 
+      - db

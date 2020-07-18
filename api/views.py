@@ -19,6 +19,7 @@ from requests.exceptions import HTTPError
 from social_django.utils import load_strategy, load_backend
 from social_core.backends.oauth import BaseOAuth2
 from social_core.exceptions import MissingBackend, AuthTokenError, AuthForbidden
+import time
 # Create your views here.
 
 
@@ -120,8 +121,10 @@ class GoogleLogin(APIView):
 class facebooklogin(APIView):
     
     def post(self,request):
+        print(request.data)
         accesstoken=request.data.get('accesstoken')
         expiration_time=request.data.get('expiration_time')
+        print(expiration_time)
         userID=request.data.get('userID')
         if(int(expiration_time) < int(time.time())):
             content= {"status": 404}
