@@ -21,7 +21,7 @@ from social_core.backends.oauth import BaseOAuth2
 from social_core.exceptions import MissingBackend, AuthTokenError, AuthForbidden
 import time
 # Create your views here.
-
+import requests as r
 
 
 @api_view(['GET'])
