@@ -53,6 +53,23 @@ class getquestion(APIView):
             }
             return Response(response)
 
+import pytz
+utc=pytz.UTC
+@api_view(['GET'])
+def configstatus(request):
+    configs=config.objects.all()
+    if configs:
+       response={
+       "current_day":configs[0].current_day,
+       "start_time":configs[0].quiz_start.replace(tzinfo=utc),
+       "end_time":configs[0].quiz_endtime.replace(tzinfo=utc)  
+       }
+       return Response(response)
+    response={
+        "status":404,
+        "message":"no confings founnd"
+    }
+    return Response(response)
 class Answer(APIView):
     permission_classes=(IsAuthenticated,)
     
