@@ -105,18 +105,29 @@ CORS_ORIGIN_ALLOW_ALL = True
         #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
    # }
 #}
-
-DATABASES = {         # GALAXYZPJ'S LOCAL INSTANCE
+if 'RDS_DB_NAME' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ['RDS_DB_NAME'],
+            'USER': os.environ['RDS_USERNAME'],
+            'PASSWORD': os.environ['RDS_PASSWORD'],
+            'HOST': os.environ['RDS_HOSTNAME'],
+            'PORT': os.environ['RDS_PORT'],
+        }
+    }
+else :
+    DATABASES = {         # GALAXYZPJ'S LOCAL INSTANCE
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': 'ramiz',
-        'HOST': 'localhost',
+        'PASSWORD': 'postgres',
+        'HOST': 'postgres',
         'PORT': '5432',
     }
 }
- #DATABASES = {
+ #DATABpippiASES = {
   #  'default': {
    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
     #    'NAME': 'd8s04nkvqhp0h4',
