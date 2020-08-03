@@ -18,4 +18,5 @@ urlpatterns = [
     path('refresh',TokenRefreshView.as_view(),name='token_refresh'),
     path('question',views.getquestion.as_view(),name='question api'),
     path('facebooklogin',views.facebooklogin.as_view(),name='facebooklogin'),
+    path('status',views.configstatus,name='quiz_status'),
 ]

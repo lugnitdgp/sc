@@ -19,8 +19,9 @@ from requests.exceptions import HTTPError
 from social_django.utils import load_strategy, load_backend
 from social_core.backends.oauth import BaseOAuth2
 from social_core.exceptions import MissingBackend, AuthTokenError, AuthForbidden
+import time
 # Create your views here.
-
+import requests as r
 
 
 @api_view(['GET'])
@@ -52,6 +53,23 @@ class getquestion(APIView):
             }
             return Response(response)
 
+import pytz
+utc=pytz.UTC
+@api_view(['GET'])
+def configstatus(request):
+    configs=config.objects.all()
+    if configs:
+       response={
+       "current_day":configs[0].current_day,
+       "start_time":configs[0].quiz_start.replace(tzinfo=utc),
+       "end_time":configs[0].quiz_endtime.replace(tzinfo=utc)  
+       }
+       return Response(response)
+    response={
+        "status":404,
+        "message":"no confings founnd"
+    }
+    return Response(response)
 class Answer(APIView):
     permission_classes=(IsAuthenticated,)
     
@@ -120,8 +138,10 @@ class GoogleLogin(APIView):
 class facebooklogin(APIView):
     
     def post(self,request):
+        print(request.data)
         accesstoken=request.data.get('accesstoken')
         expiration_time=request.data.get('expiration_time')
+        print(expiration_time)
         userID=request.data.get('userID')
         if(int(expiration_time) < int(time.time())):
             content= {"status": 404}
@@ -138,7 +158,7 @@ class facebooklogin(APIView):
             username= idInfo['name'],
             image= idInfo['picture']['data']['url'],
             try:
-                user = User.objects.get(email=data['email'])
+                user = User.objects.get(email=email)
             except User.DoesNotExist:
                 user = User()
                 user.username = username

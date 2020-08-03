@@ -1,0 +1,28 @@
+version: '3'
+    
+services:
+  db:
+    image: postgres
+    environment:
+      - DJANGO_SETTINGS_MODULE=settings.production
+      - RDS_DB_NAME=postgres
+      - RDS_USERNAME=postgres
+      - RDS_PASSWORD='postgres'
+      - RDS_HOSTNAME=db
+      - RDS_PORT=5432
+  web:
+    build: .
+    command: gunicorn screencast.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/var/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - migration
+
+  migration:
+    build: .
+    command: python manage.py migrate --noinput
+    depends_on: 
+      - db
