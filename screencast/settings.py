@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET_KEY','k(o5900674725b3)1w5(lgz$9ckubfetysox12!(3h4=73+@^&')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'api',
     'rest_framework',
     'corsheaders',
+    'oauth2_provider',
 ]
 
 MIDDLEWARE = [
@@ -106,11 +107,11 @@ else :
     DATABASES = {         # GALAXYZPJ'S LOCAL INSTANCE
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
+        'NAME': 'dbscreencast',
         'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'db',
-        'PORT': '5432',
+        'PASSWORD': 'password',
+        # 'HOST': 'localhost',
+        # 'PORT': '5432',
     }
 }
  #DATABpippiASES = {
@@ -187,3 +188,9 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=30),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
+# SECURE_HSTS_SECONDS= 60
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE= True
+# CSRF_COOKIE_SECURE = True
+# SECURE_HSTS_PRELOAD = True
