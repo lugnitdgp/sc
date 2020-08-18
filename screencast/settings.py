@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET_KEY','k(o5900674725b3)1w5(lgz$9ckubfetysox12!(3h4=73+@^&')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1','54.88.95.17']
 
 
 # Application definition
@@ -92,22 +92,10 @@ TEMPLATES = [
 WSGI_APPLICATION = 'screencast.wsgi.application'
 CORS_ORIGIN_ALLOW_ALL = True
 
-if 'RDS_DB_NAME' in os.environ:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ['RDS_DB_NAME'],
-            'USER': os.environ['RDS_USERNAME'],
-            'PASSWORD': os.environ['RDS_PASSWORD'],
-            'HOST': os.environ['RDS_HOSTNAME'],
-            'PORT': os.environ['RDS_PORT'],
-        }
-    }
-else :
-    DATABASES = {         # GALAXYZPJ'S LOCAL INSTANCE
+DATABASES = {         # GALAXYZPJ'S LOCAL INSTANCE
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dbscreencast',
+        'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'password',
         # 'HOST': 'localhost',
