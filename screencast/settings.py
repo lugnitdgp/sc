@@ -25,7 +25,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY','k(o5900674725b3)1w5(lgz$9ckubfetysox12
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','54.88.95.17']
+ALLOWED_HOSTS = ['127.0.0.1','54.88.95.17', 'scapi.trennds.com']
 
 
 # Application definition
