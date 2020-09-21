@@ -20,6 +20,7 @@ from social_django.utils import load_strategy, load_backend
 from social_core.backends.oauth import BaseOAuth2
 from social_core.exceptions import MissingBackend, AuthTokenError, AuthForbidden
 import time
+import datetime
 # Create your views here.
 import requests as r
 
@@ -58,19 +59,20 @@ utc=pytz.UTC
 @api_view(['GET'])
 def configstatus(request):
     configs=config.objects.all()
-    current_time=datetime.datetime.now().replace(tzinfo=utc)
+    
 
 
     # arr = [[config]*(no of instances of each day)]* no of days
-    no_day = arr[0]*10  #initialized 10 days with 0 instances of each
-
+    arr=[]
+    arr = [0 for i in range(10)]      #initialized 10 days with 0 instances of each
+    cnt = 1
     for con in configs:
         curr_day = con.current_day
         arr[curr_day] += 1
         cnt = max(curr_day, cnt)
     list_of_configs = []
     new = []
-    for i in range(1,cnt):
+    for i in range(1,cnt+1):
         for j in configs:
             curr_day = j.current_day
             if curr_day == i:
