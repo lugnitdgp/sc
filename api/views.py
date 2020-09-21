@@ -82,6 +82,7 @@ def configstatus(request):
     mini = datetime.datetime.now().replace(tzinfo=utc)
     maxi = datetime.datetime.now().replace(tzinfo=utc)
     choice = None
+    default_choice = configs[0]
     for i in list_of_configs:
         mini = datetime.datetime.now().replace(tzinfo=utc)
         maxi = datetime.datetime.now().replace(tzinfo=utc)
