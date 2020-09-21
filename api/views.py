@@ -58,11 +58,48 @@ utc=pytz.UTC
 @api_view(['GET'])
 def configstatus(request):
     configs=config.objects.all()
-    if configs:
+    current_time=datetime.datetime.now().replace(tzinfo=utc)
+
+
+    # arr = [[config]*(no of instances of each day)]* no of days
+    no_day = arr[0]*10  #initialized 10 days with 0 instances of each
+
+    for con in configs:
+        curr_day = con.current_day
+        arr[curr_day] += 1
+        cnt = max(curr_day, cnt)
+    list_of_configs = []
+    new = []
+    for i in range(1,cnt):
+        for j in configs:
+            curr_day = j.current_day
+            if curr_day == i:
+                new.append(j)
+        list_of_configs.append(new)
+        new = []
+    mini = datetime.datetime.now().replace(tzinfo=utc)
+    maxi = datetime.datetime.now().replace(tzinfo=utc)
+    choice = None
+    for i in list_of_configs:
+        mini = datetime.datetime.now().replace(tzinfo=utc)
+        maxi = datetime.datetime.now().replace(tzinfo=utc)
+        for j in i:
+            default_choice = j
+            quiz_endtime = j.quiz_endtime.replace(tzinfo=utc)
+            quiz_start = j.quiz_start.replace(tzinfo = utc)
+            if mini>quiz_start and maxi < quiz_endtime:
+                choice = j
+                mini = quiz_start
+                maxi = quiz_endtime
+        if choice is not None:
+            break
+    if choice is None:
+        choice = default_choice
+    if choice:
        response={
-       "current_day":configs[0].current_day,
-       "start_time":configs[0].quiz_start.replace(tzinfo=utc),
-       "end_time":configs[0].quiz_endtime.replace(tzinfo=utc)  
+       "current_day":choice.current_day,
+       "start_time":choice.quiz_start.replace(tzinfo=utc),
+       "end_time":choice.quiz_endtime.replace(tzinfo=utc)  
        }
        return Response(response)
     response={
