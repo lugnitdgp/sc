@@ -25,7 +25,8 @@ class Question(models.Model):
         answer=answer.replace(" ","")
         answers=string.split(",")
         for ans in answers:
-            if answer==ans:
+            z=ans.replace(" ","")
+            if answer==z:
                 return True
         return False
     def get_next_question(self,day,qno):
