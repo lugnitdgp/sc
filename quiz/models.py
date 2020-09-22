@@ -55,7 +55,7 @@ class UserScore(models.Model):
         return players
 
     def new_score(self,player):
-        curr_question=player.current_question
+        
         player.score+=10
         # initializing current active config:
         configs= config.objects.all()
@@ -100,11 +100,12 @@ class UserScore(models.Model):
             choice = default_choice
         curr_config=choice
         #end
+        curr_question=player.current_question
         if curr_config.q_no == curr_question:
             player.current_question = 1
-            player.today = +1
+            player.today = curr_config.current_day +1
         else:
-            player.current_question = curr_config.current_day +1
+            player.current_question += 1
         player.save()
 
 
