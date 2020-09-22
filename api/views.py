@@ -23,10 +23,10 @@ import time
 import datetime
 # Create your views here.
 import requests as r
-
+import pytz
+utc=pytz.UTC
 
 @api_view(['GET'])
-
 def leaderboard(request):
     players=UserScore.leaderboard(UserScore)
     serializer=LeaderboardSerializer(players,many=True)
@@ -98,8 +98,7 @@ class getquestion(APIView):
             }
             return Response(response)
 
-import pytz
-utc=pytz.UTC
+
 @api_view(['GET'])
 def configstatus(request):
     configs=config.objects.all()
