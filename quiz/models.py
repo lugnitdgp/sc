@@ -116,7 +116,8 @@ class config(models.Model):
     quiz_active=models.BooleanField(default=True)
     quiz_start=models.DateTimeField()
     quiz_endtime=models.DateTimeField()
-
+    def __str__(self):
+        return "Day-{}".format(self.current_day)
     def quiz_active(self):
         # initializing current active config:
         configs= self.objects.all()
