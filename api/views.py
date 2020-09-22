@@ -206,9 +206,9 @@ class Answer(APIView):
         curr_config=choice
         #end
         if active:
-            day=config.objects.all()[0].current_day
+            day=curr_config.current_day
             curr_question=player.current_question
-            if curr_question>config.objects.all()[0].q_no:
+            if curr_question>curr_config.q_no:
                 response={
                   "quiz_finished": True
                 }
@@ -218,7 +218,7 @@ class Answer(APIView):
             quiz_ended=False
             if result:
                player.new_score(player)
-               if curr_question==config.objects.all()[0].q_no:
+               if curr_question==curr_config.q_no:
                    quiz_ended=True
             response={
                     'status_code':status.HTTP_200_OK,
