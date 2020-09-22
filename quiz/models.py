@@ -55,7 +55,6 @@ class UserScore(models.Model):
         return players
 
     def new_score(self,player):
-        player= self.objects.filter(user=request.user)[0]
         curr_question=player.current_question
         player.score+=10
         # initializing current active config:
