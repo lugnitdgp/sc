@@ -98,7 +98,7 @@ class config(models.Model):
                 default_choice = j
                 quiz_endtime = j.quiz_endtime.replace(tzinfo=utc)
                 quiz_start = j.quiz_start.replace(tzinfo = utc)
-                if mini>quiz_start and maxi < quiz_endtime:
+                if maxi < quiz_endtime:
                     choice = j
                     mini = quiz_start
                     maxi = quiz_endtime
