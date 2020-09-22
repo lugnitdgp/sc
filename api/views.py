@@ -221,6 +221,7 @@ class Answer(APIView):
             quiz_ended=False
             if result:
                player.new_score(player)
+               curr_day =player.today 
                if curr_day > curr_config.current_day:
                    quiz_ended=True
             response={
