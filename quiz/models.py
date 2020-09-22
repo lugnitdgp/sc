@@ -37,13 +37,16 @@ class UserScore(models.Model):
     name=models.CharField(max_length=55,null=True)
     score=models.IntegerField(default=0)
     rank=models.IntegerField(null=True)
+    today = models.IntegerField(default=1)
     current_question=models.IntegerField()
     last_modified=models.DateTimeField(auto_now=True)
+    
     
     class Meta:
         ordering =['-score','last_modified']
 
     def leaderboard(self):
+
         players=self.objects.all()
         rank=1
         for player in players:
@@ -52,8 +55,57 @@ class UserScore(models.Model):
         return players
 
     def new_score(self,player):
+        player= self.objects.filter(user=request.user)[0]
+        curr_question=player.current_question
         player.score+=10
-        player.current_question +=1
+        # initializing current active config:
+        configs= config.objects.all()
+
+
+
+        # arr = [[config]*(no of instances of each day)]* no of days
+        arr=[]
+        arr = [0 for i in range(10)]      #initialized 10 days with 0 instances of each
+        cnt = 1
+        for con in configs:
+            curr_day = con.current_day
+            arr[curr_day] += 1
+            cnt = max(curr_day, cnt)
+        list_of_configs = []
+        new = []
+        for i in range(1,cnt+1):
+            for j in configs:
+                curr_day = j.current_day
+                if curr_day == i:
+                    new.append(j)
+            list_of_configs.append(new)
+            new = []
+
+        maxi = datetime.datetime.now().replace(tzinfo=utc)
+        choice = None
+        default_choice = configs[0]
+        for i in list_of_configs:
+            
+            maxi = datetime.datetime.now().replace(tzinfo=utc)
+            for j in i:
+                default_choice = j
+                quiz_endtime = j.quiz_endtime.replace(tzinfo=utc)
+                
+                if maxi < quiz_endtime:
+                    choice = j
+                    
+                    maxi = quiz_endtime
+            if choice is not None:
+                break
+        if choice is None:
+            choice = default_choice
+        curr_config=choice
+        #end
+        if curr_config.q_no == curr_question:
+            player.current_question = 1
+            player.today = +1
+        else:
+            player.current_question +=1
         player.save()
 
 
@@ -87,20 +139,20 @@ class config(models.Model):
                     new.append(j)
             list_of_configs.append(new)
             new = []
-        mini = datetime.datetime.now().replace(tzinfo=utc)
+
         maxi = datetime.datetime.now().replace(tzinfo=utc)
         choice = None
         default_choice = configs[0]
         for i in list_of_configs:
-            mini = datetime.datetime.now().replace(tzinfo=utc)
+            
             maxi = datetime.datetime.now().replace(tzinfo=utc)
             for j in i:
                 default_choice = j
                 quiz_endtime = j.quiz_endtime.replace(tzinfo=utc)
-                quiz_start = j.quiz_start.replace(tzinfo = utc)
+                
                 if maxi < quiz_endtime:
                     choice = j
-                    mini = quiz_start
+                    
                     maxi = quiz_endtime
             if choice is not None:
                 break

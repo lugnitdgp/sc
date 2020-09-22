@@ -59,20 +59,20 @@ class getquestion(APIView):
                     new.append(j)
             list_of_configs.append(new)
             new = []
-        mini = datetime.datetime.now().replace(tzinfo=utc)
+
         maxi = datetime.datetime.now().replace(tzinfo=utc)
         choice = None
         default_choice = configs[0]
         for i in list_of_configs:
-            mini = datetime.datetime.now().replace(tzinfo=utc)
+         
             maxi = datetime.datetime.now().replace(tzinfo=utc)
             for j in i:
                 default_choice = j
                 quiz_endtime = j.quiz_endtime.replace(tzinfo=utc)
-                quiz_start = j.quiz_start.replace(tzinfo = utc)
+   
                 if maxi < quiz_endtime:
                     choice = j
-                    mini = quiz_start
+  
                     maxi = quiz_endtime
             if choice is not None:
                 break
@@ -82,8 +82,9 @@ class getquestion(APIView):
         #end
         if active:
             day= curr_config.current_day
+            curr_day=player.today
             curr_question=player.current_question
-            if curr_question> curr_config.q_no:
+            if curr_day > curr_config.current_day:
                 response={
                   "quiz_finished": True
                 }
@@ -122,20 +123,20 @@ def configstatus(request):
                 new.append(j)
         list_of_configs.append(new)
         new = []
-    mini = datetime.datetime.now().replace(tzinfo=utc)
+    
     maxi = datetime.datetime.now().replace(tzinfo=utc)
     choice = None
     default_choice = configs[0]
     for i in list_of_configs:
-        mini = datetime.datetime.now().replace(tzinfo=utc)
+
         maxi = datetime.datetime.now().replace(tzinfo=utc)
         for j in i:
             default_choice = j
             quiz_endtime = j.quiz_endtime.replace(tzinfo=utc)
-            quiz_start = j.quiz_start.replace(tzinfo = utc)
+
             if maxi < quiz_endtime:
                 choice = j
-                mini = quiz_start
+  
                 maxi = quiz_endtime
         if choice is not None:
             break
@@ -184,20 +185,20 @@ class Answer(APIView):
                     new.append(j)
             list_of_configs.append(new)
             new = []
-        mini = datetime.datetime.now().replace(tzinfo=utc)
+        
         maxi = datetime.datetime.now().replace(tzinfo=utc)
         choice = None
         default_choice = configs[0]
         for i in list_of_configs:
-            mini = datetime.datetime.now().replace(tzinfo=utc)
+
             maxi = datetime.datetime.now().replace(tzinfo=utc)
             for j in i:
                 default_choice = j
                 quiz_endtime = j.quiz_endtime.replace(tzinfo=utc)
-                quiz_start = j.quiz_start.replace(tzinfo = utc)
+            
                 if maxi < quiz_endtime:
                     choice = j
-                    mini = quiz_start
+    
                     maxi = quiz_endtime
             if choice is not None:
                 break
@@ -210,8 +211,9 @@ class Answer(APIView):
             tot_q += i.q_no
         if active:
             day=curr_config.current_day
+            curr_day =player.today
             curr_question=player.current_question
-            if curr_question>tot_q:
+            if curr_day>day:
                 response={
                   "quiz_finished": True
                 }
