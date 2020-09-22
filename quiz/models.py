@@ -104,7 +104,7 @@ class UserScore(models.Model):
             player.current_question = 1
             player.today = +1
         else:
-            player.current_question +=1
+            player.current_question = curr_config.current_day +1
         player.save()
 
 
