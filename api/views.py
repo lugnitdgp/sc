@@ -94,7 +94,7 @@ class getquestion(APIView):
                 return Response(response)
             if curr_day<day:
                 player.today = day
-                player.curr_question = 1
+                player.current_question = 1
                 curr_day =player.today
                 curr_question=player.current_question
                 player.save()
@@ -226,7 +226,7 @@ class Answer(APIView):
                 return Response(response)
             if curr_day<day:
                 player.today = day
-                player.curr_question = 1
+                player.current_question= 1
                 curr_day =player.today
                 curr_question=player.current_question
                 player.save()
