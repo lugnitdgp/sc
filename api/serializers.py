@@ -2,9 +2,11 @@ from rest_framework import serializers
 from quiz.models import UserScore,Question,config
 from django.contrib.auth.models import User
 import datetime
+from pytz import timezone
 import pytz
 
-utc=pytz.UTC
+utc=timezone('Asia/Calcutta')
+utc.localize(datetime.datetime(2020, 7, 10, 12, 0))
 class LeaderboardSerializer(serializers.ModelSerializer):
 
     class Meta:

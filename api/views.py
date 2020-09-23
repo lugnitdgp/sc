@@ -26,6 +26,7 @@ import requests as r
 import pytz
 from pytz import timezone
 utc=timezone('Asia/Calcutta')
+utc.localize(datetime.datetime(2020, 7, 10, 12, 0))
 
 
 @api_view(['GET'])
