@@ -36,6 +36,7 @@ class Question(models.Model):
 class UserScore(models.Model):
     user=models.ForeignKey(to=User,on_delete=models.CASCADE)
     name=models.CharField(max_length=55,null=True)
+    email = models.EmailField(max_length=70,blank=True)
     score=models.IntegerField(default=0)
     rank=models.IntegerField(null=True)
     today = models.IntegerField(default=1)

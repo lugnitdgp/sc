@@ -1,7 +1,10 @@
 from rest_framework import serializers
 from quiz.models import UserScore,Question,config
 from django.contrib.auth.models import User
+import datetime
+import pytz
 
+utc=pytz.UTC
 class LeaderboardSerializer(serializers.ModelSerializer):
 
     class Meta:
