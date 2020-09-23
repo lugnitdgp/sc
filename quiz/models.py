@@ -14,7 +14,7 @@ class Question(models.Model):
     image=models.ImageField(upload_to='media/images',blank=True)
     hint=models.CharField(max_length=555,default='na')
     def __str__(self):
-        return "{}-Day{}".format(self.question,self.day)
+        return "Day-{}-Q-{} : {}".format(self.day, self.question_no, self.question)
 
     class Meta:
         ordering=['day','question_no']
