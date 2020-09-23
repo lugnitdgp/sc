@@ -55,6 +55,7 @@ class UserScore(models.Model):
         for player in players:
             player.rank=rank
             rank +=1
+            player.save()
         return players
 
     def new_score(self,player):
