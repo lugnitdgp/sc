@@ -92,6 +92,12 @@ class getquestion(APIView):
                   "quiz_finished": True
                 }
                 return Response(response)
+            if curr_day<day:
+                player.today = day
+                player.curr_question = 1
+                curr_day =player.today
+                curr_question=player.current_question
+                player.save()
             question=Question.objects.filter(day=day,question_no=curr_question)[0]
             serializer=QuestionSerializer(question)
             return Response(serializer.data)
@@ -153,7 +159,7 @@ def configstatus(request):
        return Response(response)
     response={
         "status":404,
-        "message":"no configs founnd"
+        "message":"no configs found"
     }
     return Response(response)
 class Answer(APIView):
