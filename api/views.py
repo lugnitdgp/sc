@@ -24,6 +24,7 @@ import datetime
 # Create your views here.
 import requests as r
 import pytz
+from pytz import timezone
 utc=timezone('Asia/Calcutta')
 
 
