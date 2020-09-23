@@ -300,7 +300,7 @@ class facebooklogin(APIView):
 
             email= idInfo['email'],
             username= idInfo['name'],
-            #username = username[2:-3]
+            username = username[0]
             image= idInfo['picture']['data']['url'],
             try:
                 user = User.objects.get(email=email)
