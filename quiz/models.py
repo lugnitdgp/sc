@@ -44,7 +44,7 @@ class UserScore(models.Model):
     last_modified=models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return "{}-{}-Day{}-Score-{}".format(self.rank, self.name,self.day, self.score)
+        return "{}-{}-Day{}-Score-{}".format(self.rank, self.name,self.today, self.score)
     class Meta:
         ordering =['-score','last_modified']
 
