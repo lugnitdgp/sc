@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 import datetime
 import pytz
-import timezone
+from pytz import timezone
 utc=timezone('Asia/Calcutta')
 utc = utc.localize(datetime.datetime(2020, 7, 10, 12, 0))
 # Create your models here.
