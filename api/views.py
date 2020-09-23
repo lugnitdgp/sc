@@ -25,8 +25,7 @@ import datetime
 import requests as r
 import pytz
 from pytz import timezone
-utc= pytz.timezone('Asia/Calcutta')
-utc = utc.localize(datetime.datetime(2020, 7, 10, 12, 0))
+utc= pytz.utc
 
 
 
