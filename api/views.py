@@ -293,18 +293,19 @@ class facebooklogin(APIView):
             except User.DoesNotExist:
                 user = User()
                 user.username = username
+                x = user.username
                 #removing brackets and inverted commas
-                user.username=user.username.replace("(","")
-                user.username=user.username.replace(")","")
-                user.username=user.username.replace(",","")
-                user.username=user.username.replace("'","")
+                x=x.replace("(","")
+                x=x.replace(")","")
+                x=x.replace(",","")
+                x=x.replace("'","")
                 # provider random default password
                 user.password = make_password(BaseUserManager().make_random_password())
                 user.email = email
                 
 
                 user.save()
-                score = UserScore(user=user,name=user.username, email = user.email, current_question = 1)
+                score = UserScore(user=user,name=x, email = user.email, current_question = 1)
                 score.save()
 
         token = RefreshToken.for_user(user)  # generate token without username & password
