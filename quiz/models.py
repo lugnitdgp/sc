@@ -174,10 +174,10 @@ class config(models.Model):
             print(current_time>quiz_endtime)
             return False
         return True
-    def save(self, force_insert=False, force_update=False, *args, **kwargs):
-        if not self.pk:
-            players=UserScore.objects.all()
-            for player in players:
-                player.current_question=1
-                player.save()
-            super(config, self).save(force_insert, force_update, *args, **kwargs)
+    # def save(self, force_insert=False, force_update=False, *args, **kwargs):
+    #     if not self.pk:
+    #         players=UserScore.objects.all()
+    #         for player in players:
+    #             player.current_question=1
+    #             player.save()
+    #         super(config, self).save(force_insert, force_update, *args, **kwargs)
