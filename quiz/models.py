@@ -2,8 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 import datetime
 import pytz
-
-utc=pytz.UTC
+import timezone
+utc=timezone('Asia/Calcutta')
+utc = utc.localize(datetime.datetime(2020, 7, 10, 12, 0))
 # Create your models here.
 class Question(models.Model):
     question=models.CharField(max_length=550)

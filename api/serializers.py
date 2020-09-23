@@ -6,7 +6,7 @@ from pytz import timezone
 import pytz
 
 utc=timezone('Asia/Calcutta')
-utc.localize(datetime.datetime(2020, 7, 10, 12, 0))
+utc = utc.localize(datetime.datetime(2020, 7, 10, 12, 0))
 class LeaderboardSerializer(serializers.ModelSerializer):
 
     class Meta:
