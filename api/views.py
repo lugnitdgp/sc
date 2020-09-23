@@ -24,7 +24,8 @@ import datetime
 # Create your views here.
 import requests as r
 import pytz
-utc=pytz.UTC
+utc=timezone('Asia/Calcutta')
+
 
 @api_view(['GET'])
 def leaderboard(request):
