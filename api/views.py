@@ -293,12 +293,7 @@ class facebooklogin(APIView):
             except User.DoesNotExist:
                 user = User()
                 user.username = username
-                x = user.username
-                #removing brackets and inverted commas
-                x=x.replace("(","")
-                x=x.replace(")","")
-                x=x.replace(",","")
-                x=x.replace("'","")
+                
                 # provider random default password
                 user.password = make_password(BaseUserManager().make_random_password())
                 user.email = email
