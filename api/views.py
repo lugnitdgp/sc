@@ -218,6 +218,12 @@ class Answer(APIView):
                   "quiz_finished": True
                 }
                 return Response(response)
+            if curr_day<day:
+                player.today = day
+                player.curr_question = 1
+                curr_day =player.today
+                curr_question=player.current_question
+                player.save()
             question=Question.objects.filter(day=day,question_no=curr_question)
             result=Question.check_ans(Question,answer,question)
             quiz_ended=False
