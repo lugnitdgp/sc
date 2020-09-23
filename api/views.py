@@ -301,11 +301,7 @@ class facebooklogin(APIView):
                 # provider random default password
                 user.password = make_password(BaseUserManager().make_random_password())
                 user.email = email
-                #removing brackets and inverted commas
-                user.email=user.email.replace("(","")
-                user.email=user.email.replace(")","")
-                user.email=user.email.replace(",","")
-                user.email=user.email.replace("'","")
+                
 
                 user.save()
                 score = UserScore(user=user,name=user.username, email = user.email, current_question = 1)
