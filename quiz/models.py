@@ -43,7 +43,8 @@ class UserScore(models.Model):
     current_question=models.IntegerField()
     last_modified=models.DateTimeField(auto_now=True)
     
-    
+    def __str__(self):
+        return "{}-{}-Day{}-Score-{}".format(self.rank, self.name,self.day, self.score)
     class Meta:
         ordering =['-score','last_modified']
 
