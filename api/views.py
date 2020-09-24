@@ -263,12 +263,12 @@ class GoogleLogin(APIView):
             user = User.objects.get(email=data['email'])
         except User.DoesNotExist:
             user = User()
-            user.username = data['name']
+            user.username = data['email']
             # provider random default password
             user.password = make_password(BaseUserManager().make_random_password())
             user.email = data['email']
             user.save()
-            score = UserScore(user=user,name=user.username, email = user.email, current_question = 1)
+            score = UserScore(user=user,name=data['name'], email = user.email, current_question = 1)
             score.save()
 
         token = RefreshToken.for_user(user)  # generate token without username & password
@@ -307,12 +307,12 @@ class facebooklogin(APIView):
                 user = User.objects.get(email=email)
             except User.DoesNotExist:
                 user = User()
-                user.username = name
+                user.username = email
                 user.email = email
                 # provider random default password
                 user.password = make_password(BaseUserManager().make_random_password())
                 user.save()
-                score = UserScore(user=user,name=user.username, email = user.email, current_question = 1)
+                score = UserScore(user=user,name=name, email = user.email, current_question = 1)
                 score.save()
 
         token = RefreshToken.for_user(user)  # generate token without username & password
