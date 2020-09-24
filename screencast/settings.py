@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 from datetime import timedelta
+from decouple import config
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -20,12 +21,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY','k(o5900674725b3)1w5(lgz$9ckubfetysox12!(3h4=73+@^&')
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ['127.0.0.1','54.88.95.17', 'scapi.trennds.com']
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')])
 
 
 # Application definition
@@ -97,25 +98,12 @@ DATABASES = {         # GALAXYZPJ'S LOCAL INSTANCE
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': 'password',
+        'PASSWORD': config('DB_PASSWORD'),
         # 'HOST': 'localhost',
         # 'PORT': '5432',
     }
 }
- #DATABpippiASES = {
-  #  'default': {
-   #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #    'NAME': 'd8s04nkvqhp0h4',
-     #   'USER': 'sqevffmxfxtbux',
-      #  'PASSWORD': 'b654e6b6714686cffbd044547270e7c70c641b234fb37ec373b6d9f399ba9402',
-       # 'HOST': 'ec2-34-224-229-81.compute-1.amazonaws.com',
-        
-       # 'OPTIONS': {
-            #'sslmode': 'require',
-      #  }
-   # }
-#}
-
+ 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
@@ -176,9 +164,5 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=30),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
-# SECURE_HSTS_SECONDS= 60
-# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-# SECURE_SSL_REDIRECT = True
-# SESSION_COOKIE_SECURE= True
-# CSRF_COOKIE_SECURE = True
-# SECURE_HSTS_PRELOAD = True
+
+
