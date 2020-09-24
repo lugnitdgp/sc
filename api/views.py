@@ -263,17 +263,18 @@ class GoogleLogin(APIView):
             user = User.objects.get(email=data['email'])
         except User.DoesNotExist:
             user = User()
-            user.username = data['name']
+            user.username = data['email']
+            user.name = data['name']
             # provider random default password
             user.password = make_password(BaseUserManager().make_random_password())
             user.email = data['email']
             user.save()
-            score = UserScore(user=user,name=user.username, email = user.email, current_question = 1)
+            score = UserScore(user=user,name=user.name, email = user.email, current_question = 1)
             score.save()
 
         token = RefreshToken.for_user(user)  # generate token without username & password
         response = {}
-        response['username'] = user.username
+        response['username'] = user.name
         response['access_token'] = str(token.access_token)
         response['refresh_token'] = str(token)
         return Response(response)
@@ -299,14 +300,18 @@ class facebooklogin(APIView):
             idInfo = r.get(url=url, params=parameters).json()
 
             email= idInfo['email'],
-            username= idInfo['name'],
+            email = email[0]        #these are tuple objects with one element. Placing the elements seperately. Else brackets and commas will be included
+            username = idInfo['email'],
             username = username[0]
+            name= idInfo['name'],
+            name = name[0]
             image= idInfo['picture']['data']['url'],
             try:
                 user = User.objects.get(email=email)
             except User.DoesNotExist:
                 user = User()
                 user.username = username
+                user.name = name
                 
                 # provider random default password
                 user.password = make_password(BaseUserManager().make_random_password())
@@ -314,12 +319,12 @@ class facebooklogin(APIView):
                 
 
                 user.save()
-                score = UserScore(user=user,name=user.username, email = user.email, current_question = 1)
+                score = UserScore(user=user,name=user.name, email = user.email, current_question = 1)
                 score.save()
 
         token = RefreshToken.for_user(user)  # generate token without username & password
         response = {}
-        response['username'] = user.username
+        response['username'] = user.name
         response['access_token'] = str(token.access_token)
         response['refresh_token'] = str(token)
         return Response(response)
