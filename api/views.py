@@ -302,8 +302,8 @@ class facebooklogin(APIView):
             
             #these are tuple objects with one element. Placing the elements seperately. Else brackets and commas will be included
             name= idInfo['name']
-            email = email[0]
-            name = name[0]
+            email = email
+            name = name
 
             image= idInfo['picture']['data']['url'],
             try:
