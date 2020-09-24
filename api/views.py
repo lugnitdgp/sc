@@ -38,7 +38,7 @@ class getquestion(APIView):
     permission_classes=(IsAuthenticated,)
 
     def get(self,request):
-        player=UserScore.objects.filter(email=request.user.username)[0]
+        player=UserScore.objects.filter(user=request.user)[0]
         active=config.quiz_active(config)
         # initializing current active config:
         configs= config.objects.all()
