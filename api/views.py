@@ -298,10 +298,13 @@ class facebooklogin(APIView):
             }
             idInfo = r.get(url=url, params=parameters).json()
 
-            email= idInfo['email'][0],
+            email= idInfo['email']
+            
             #these are tuple objects with one element. Placing the elements seperately. Else brackets and commas will be included
-            name= idInfo['name'][0]
- 
+            name= idInfo['name']
+            email = email[0]
+            name = name[0]
+
             image= idInfo['picture']['data']['url'],
             try:
                 user = User.objects.get(email=email)
