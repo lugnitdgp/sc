@@ -126,7 +126,7 @@ class config(models.Model):
         #end
         return curr_config
     def quiz_active(self):
-        curr_config = current_config(self)
+        curr_config = self.current_config(self)
         current_time=datetime.datetime.now().replace(tzinfo=utc)  
         quiz_endtime=curr_config.quiz_endtime.replace(tzinfo=utc)
         print(curr_config.quiz_endtime)
