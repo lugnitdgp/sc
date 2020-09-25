@@ -5,6 +5,9 @@ import pytz
 from pytz import timezone
 utc= pytz.utc
 # Create your models here.
+
+
+
 class Question(models.Model):
     question=models.CharField(max_length=550)
     day=models.IntegerField()
@@ -61,49 +64,7 @@ class UserScore(models.Model):
     def new_score(self,player):
         
         player.score+=10
-        # initializing current active config:
-        configs= config.objects.all()
-
-
-
-        # arr = [[config]*(no of instances of each day)]* no of days
-        arr=[]
-        arr = [0 for i in range(10)]      #initialized 10 days with 0 instances of each
-        cnt = 1
-        for con in configs:
-            curr_day = con.current_day
-            arr[curr_day] += 1
-            cnt = max(curr_day, cnt)
-        list_of_configs = []
-        new = []
-        for i in range(1,cnt+1):
-            for j in configs:
-                curr_day = j.current_day
-                if curr_day == i:
-                    new.append(j)
-            list_of_configs.append(new)
-            new = []
-
-        maxi = datetime.datetime.now().replace(tzinfo=utc)
-        choice = None
-        default_choice = configs[0]
-        for i in list_of_configs:
-            
-            maxi = datetime.datetime.now().replace(tzinfo=utc)
-            for j in i:
-                default_choice = j
-                quiz_endtime = j.quiz_endtime.replace(tzinfo=utc)
-                
-                if maxi < quiz_endtime:
-                    choice = j
-                    
-                    maxi = quiz_endtime
-            if choice is not None:
-                break
-        if choice is None:
-            choice = default_choice
-        curr_config=choice
-        #end
+        curr_config = config.current_config(config)
         curr_question=player.current_question
         if curr_config.q_no == curr_question:
             player.current_question = 1
@@ -121,12 +82,10 @@ class config(models.Model):
     quiz_endtime=models.DateTimeField()
     def __str__(self):
         return "Day-{}".format(self.current_day)
-    def quiz_active(self):
+
+    def current_config(self):
         # initializing current active config:
         configs= self.objects.all()
-    
-
-
         # arr = [[config]*(no of instances of each day)]* no of days
         arr=[]
         arr = [0 for i in range(10)]      #initialized 10 days with 0 instances of each
@@ -165,6 +124,9 @@ class config(models.Model):
             choice = default_choice
         curr_config=choice
         #end
+        return choice
+    def quiz_active(self):
+        curr_config = current_config(self)
         current_time=datetime.datetime.now().replace(tzinfo=utc)  
         quiz_endtime=curr_config.quiz_endtime.replace(tzinfo=utc)
         print(curr_config.quiz_endtime)
@@ -174,6 +136,8 @@ class config(models.Model):
             print(current_time>quiz_endtime)
             return False
         return True
+
+
     # def save(self, force_insert=False, force_update=False, *args, **kwargs):
     #     if not self.pk:
     #         players=UserScore.objects.all()

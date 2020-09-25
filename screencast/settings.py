@@ -70,6 +70,7 @@ REST_FRAMEWORK = {
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',  # django-oauth-toolkit >= 1.0.0
         'rest_framework_social_oauth2.authentication.SocialAuthentication',
     ],
+    'TEST_REQUEST_DEFAULT_FORMAT':'json'
 }
 
 ROOT_URLCONF = 'screencast.urls'
@@ -93,7 +94,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'screencast.wsgi.application'
 CORS_ORIGIN_ALLOW_ALL = True
 
-DATABASES = {         # GALAXYZPJ'S LOCAL INSTANCE
+DATABASES = {        
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',

@@ -34,55 +34,14 @@ def leaderboard(request):
     players=UserScore.leaderboard(UserScore)
     serializer=LeaderboardSerializer(players,many=True)
     return Response(serializer.data)
+    
 class getquestion(APIView):
     permission_classes=(IsAuthenticated,)
 
     def get(self,request):
         player=UserScore.objects.filter(user=request.user)[0]
         active=config.quiz_active(config)
-        # initializing current active config:
-        configs= config.objects.all()
-    
-
-
-        # arr = [[config]*(no of instances of each day)]* no of days
-        arr=[]
-        arr = [0 for i in range(10)]      #initialized 10 days with 0 instances of each
-        cnt = 1
-        for con in configs:
-            curr_day = con.current_day
-            arr[curr_day] += 1
-            cnt = max(curr_day, cnt)
-        list_of_configs = []
-        new = []
-        for i in range(1,cnt+1):
-            for j in configs:
-                curr_day = j.current_day
-                if curr_day == i:
-                    new.append(j)
-            list_of_configs.append(new)
-            new = []
-
-        maxi = datetime.datetime.now().replace(tzinfo=utc)
-        choice = None
-        default_choice = configs[0]
-        for i in list_of_configs:
-         
-            maxi = datetime.datetime.now().replace(tzinfo=utc)
-            for j in i:
-                default_choice = j
-                quiz_endtime = j.quiz_endtime.replace(tzinfo=utc)
-   
-                if maxi < quiz_endtime:
-                    choice = j
-  
-                    maxi = quiz_endtime
-            if choice is not None:
-                break
-        if choice is None:
-            choice = default_choice
-        curr_config=choice
-        #end
+        curr_config = config.current_config(config)
         if active:
             day= curr_config.current_day
             curr_day=player.today
@@ -110,46 +69,7 @@ class getquestion(APIView):
 
 @api_view(['GET'])
 def configstatus(request):
-    configs=config.objects.all()
-    
-
-
-    # arr = [[config]*(no of instances of each day)]* no of days
-    arr=[]
-    arr = [0 for i in range(10)]      #initialized 10 days with 0 instances of each
-    cnt = 1
-    for con in configs:
-        curr_day = con.current_day
-        arr[curr_day] += 1
-        cnt = max(curr_day, cnt)
-    list_of_configs = []
-    new = []
-    for i in range(1,cnt+1):
-        for j in configs:
-            curr_day = j.current_day
-            if curr_day == i:
-                new.append(j)
-        list_of_configs.append(new)
-        new = []
-    
-    maxi = datetime.datetime.now().replace(tzinfo=utc)
-    choice = None
-    default_choice = configs[0]
-    for i in list_of_configs:
-
-        maxi = datetime.datetime.now().replace(tzinfo=utc)
-        for j in i:
-            default_choice = j
-            quiz_endtime = j.quiz_endtime.replace(tzinfo=utc)
-
-            if maxi < quiz_endtime:
-                choice = j
-  
-                maxi = quiz_endtime
-        if choice is not None:
-            break
-    if choice is None:
-        choice = default_choice
+    choice = config.current_config(config)
     if choice:
        response={
        "current_day":choice.current_day,
@@ -171,50 +91,7 @@ class Answer(APIView):
         answer=request.data.get("answer",None)
         print(player)
         active=config.quiz_active(config)
-        # initializing current active config:
-        configs= config.objects.all()
-    
-
-
-        # arr = [[config]*(no of instances of each day)]* no of days
-        arr=[]
-        arr = [0 for i in range(10)]      #initialized 10 days with 0 instances of each
-        cnt = 1
-        for con in configs:
-            curr_day = con.current_day
-            arr[curr_day] += 1
-            cnt = max(curr_day, cnt)
-        list_of_configs = []
-        new = []
-        for i in range(1,cnt+1):
-            for j in configs:
-                curr_day = j.current_day
-                if curr_day == i:
-                    new.append(j)
-            list_of_configs.append(new)
-            new = []
-        
-        maxi = datetime.datetime.now().replace(tzinfo=utc)
-        choice = None
-        default_choice = configs[0]
-        for i in list_of_configs:
-
-            maxi = datetime.datetime.now().replace(tzinfo=utc)
-            for j in i:
-                default_choice = j
-                quiz_endtime = j.quiz_endtime.replace(tzinfo=utc)
-            
-                if maxi < quiz_endtime:
-                    choice = j
-    
-                    maxi = quiz_endtime
-            if choice is not None:
-                break
-        if choice is None:
-            choice = default_choice
-        curr_config=choice
-        #end
-        
+        curr_config = config.current_config(config)        
         if active:
             day=curr_config.current_day
             curr_day =player.today
