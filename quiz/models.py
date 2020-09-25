@@ -23,14 +23,14 @@ class Question(models.Model):
         ordering=['day','question_no']
 
     def check_ans(self,answer,question):
-        string = question[0].answer.lower()
-        answer = answer.lower()
-        answer=answer.replace(" ","")
-        answers=string.split(",")
+        string = question[0].answer.lower()             #the actual answer is stored here
+        answer = answer.lower()                         #answer given by player is stored here
+        answer=answer.replace(" ","")                   #spaces removed from user given answer
+        answers=string.split(",")                       #answers now contains all the probable answers(yes, more than one answers are possible)
         for ans in answers:
-            z=ans.replace(" ","")
-            if answer==z:
-                return True
+            z=ans.replace(" ","")                       #each ans's spaces removed and compared against user's given answer
+            if answer==z:       
+                return True                             #if atleast one of them matches, it gives correct ans; else false
         return False
     def get_next_question(self,day,qno):
         question=self.objects.filter(day=day,question_no=qno)
@@ -55,7 +55,7 @@ class UserScore(models.Model):
 
         players=self.objects.all()
         rank=1
-        for player in players:
+        for player in players:              #rank is decided by meta, score then last correct submission
             player.rank=rank
             rank +=1
             player.save()
@@ -63,14 +63,14 @@ class UserScore(models.Model):
 
     def new_score(self,player):
         
-        player.score+=10
+        player.score+=10                    # 10 added
         curr_config = config.current_config(config)
         curr_question=player.current_question
         if curr_config.q_no == curr_question:
-            player.current_question = 1
-            player.today = curr_config.current_day +1
+            player.current_question = 1                             #if the max no. of questions are reached for the day, then ptr is moved
+            player.today = curr_config.current_day +1               #to the next day, questions ptr is shifted to
         else:
-            player.current_question += 1
+            player.current_question += 1                            #else the questions ptr is shifted forward by one 
         player.save()
 
 
@@ -84,7 +84,7 @@ class config(models.Model):
         return "Day-{}".format(self.current_day)
 
     def current_config(self):
-        # initializing current active config:
+
         configs= self.objects.all()
         # arr = [[config]*(no of instances of each day)]* no of days
         arr=[]
@@ -92,17 +92,17 @@ class config(models.Model):
         cnt = 1
         for con in configs:
             curr_day = con.current_day
-            arr[curr_day] += 1
-            cnt = max(curr_day, cnt)
-        list_of_configs = []
+            arr[curr_day] += 1  
+            cnt = max(curr_day, cnt)       
+        list_of_configs = []        
         new = []
-        for i in range(1,cnt+1):
+        for i in range(1,cnt+1):         #This is like a vector of vectors with ith day config in list[i] vector. So we basically choose 1 out of each day,
             for j in configs:
                 curr_day = j.current_day
                 if curr_day == i:
                     new.append(j)
             list_of_configs.append(new)
-            new = []
+            new = []                
 
         maxi = datetime.datetime.now().replace(tzinfo=utc)
         choice = None
@@ -114,34 +114,27 @@ class config(models.Model):
                 default_choice = j
                 quiz_endtime = j.quiz_endtime.replace(tzinfo=utc)
                 
-                if maxi < quiz_endtime:
+                if maxi < quiz_endtime:                 #the config with the maximum endtime is chosen incase of a clash
                     choice = j
                     
                     maxi = quiz_endtime
-            if choice is not None:
+            if choice is not None:                      #IMP: if there is a valid config with a lower day it would be given higher priority
                 break
-        if choice is None:
+        if choice is None:                              #if there are no configs, the case is handled in quiz_active () function
             choice = default_choice
-        curr_config=choice
-        #end
+        curr_config=choice                  
+        
         return curr_config
+
     def quiz_active(self):
-        curr_config = self.current_config(self)
-        current_time=datetime.datetime.now().replace(tzinfo=utc)  
+        curr_config = self.current_config(self)                         #current valid config is found
+        current_time=datetime.datetime.now().replace(tzinfo=utc)         
         quiz_endtime=curr_config.quiz_endtime.replace(tzinfo=utc)
         print(curr_config.quiz_endtime)
         print(current_time)  
-        if current_time>quiz_endtime:
-            curr_config.quiz_active=False
+        if current_time>quiz_endtime:                                   #if the valid config's time endtime is yet to come, then its an active quiz. The starttime value is 
+            curr_config.quiz_active=False                               #compared in the frontend. 
             print(current_time>quiz_endtime)
             return False
         return True
 
-
-    # def save(self, force_insert=False, force_update=False, *args, **kwargs):
-    #     if not self.pk:
-    #         players=UserScore.objects.all()
-    #         for player in players:
-    #             player.current_question=1
-    #             player.save()
-    #         super(config, self).save(force_insert, force_update, *args, **kwargs)

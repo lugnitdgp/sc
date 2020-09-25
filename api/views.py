@@ -46,14 +46,14 @@ class getquestion(APIView):
             day= curr_config.current_day
             curr_day=player.today
             curr_question=player.current_question
-            if curr_day > curr_config.current_day:
+            if curr_day > curr_config.current_day:             
                 response={
                   "quiz_finished": True
                 }
                 return Response(response)
-            if curr_day<day:
-                player.today = day
-                player.current_question = 1
+            if curr_day<day:                             #IMP: this is done so that for users who haven't completed the last day's task completely
+                player.today = day                       #The ptr on current question is shifted to 1 and the day is shifted to whatever the present day is
+                player.current_question = 1              
                 curr_day =player.today
                 curr_question=player.current_question
                 player.save()
