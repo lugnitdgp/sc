@@ -203,6 +203,6 @@ class facebooklogin(APIView):
         response['username'] = user.username
         response['access_token'] = str(token.access_token)
         response['refresh_token'] = str(token)
-        response['image']= str(image)
+        response['image']= image[0]
         return Response(response)
         
