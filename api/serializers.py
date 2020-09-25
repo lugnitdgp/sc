@@ -10,7 +10,7 @@ class LeaderboardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=UserScore
-        fields=['user','name','email','score','rank']
+        fields=['user','name','imgurl','email','score','rank']
 
 class QuestionSerializer(serializers.ModelSerializer):
 
