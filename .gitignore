@@ -8,7 +8,7 @@ db.sqlite3
 /static
 .DS_Store
 venv
-
+.env
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
