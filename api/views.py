@@ -52,8 +52,8 @@ class getquestion(APIView):
                 }
                 return Response(response)
             if curr_day<day:                             #IMP: this is done so that for users who haven't completed the last day's task completely
-                player.today = day                       #The ptr on current question is shifted to 1 and the day is shifted to whatever the present day is
-                player.current_question = 1              
+                player.today = day                       #The ptr on current question is shifted to 1 and the day is shifted to whatever the present day is.
+                player.current_question = 1              #EDGE CASE: ERROR if there are only 1 question in a round. 
                 curr_day =player.today
                 curr_question=player.current_question
                 player.save()
@@ -136,6 +136,7 @@ class GoogleLogin(APIView):
             return Response(content)
 
         # create user if not exist
+        image = data['picture']
         try:
             user = User.objects.get(email=data['email'])
         except User.DoesNotExist:
@@ -145,14 +146,16 @@ class GoogleLogin(APIView):
             user.password = make_password(BaseUserManager().make_random_password())
             user.email = data['email']
             user.save()
-            score = UserScore(user=user,name=data['name'], email = user.email, current_question = 1)
+            score = UserScore(user=user,name=data['name'],imgurl = image, email = user.email, current_question = 1)
             score.save()
 
         token = RefreshToken.for_user(user)  # generate token without username & password
         response = {}
+        
         response['username'] = user.username
         response['access_token'] = str(token.access_token)
         response['refresh_token'] = str(token)
+        response['image'] = str(image)
         return Response(response)
 
 
@@ -192,7 +195,7 @@ class facebooklogin(APIView):
                 # provider random default password
                 user.password = make_password(BaseUserManager().make_random_password())
                 user.save()
-                score = UserScore(user=user,name=name, email = user.email, current_question = 1)
+                score = UserScore(user=user,name=name,imgurl= image, email = user.email, current_question = 1)
                 score.save()
 
         token = RefreshToken.for_user(user)  # generate token without username & password
@@ -200,5 +203,6 @@ class facebooklogin(APIView):
         response['username'] = user.username
         response['access_token'] = str(token.access_token)
         response['refresh_token'] = str(token)
+        response['image']= str(image)
         return Response(response)
         
