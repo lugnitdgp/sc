@@ -124,7 +124,7 @@ class config(models.Model):
             choice = default_choice
         curr_config=choice
         #end
-        return choice
+        return curr_config
     def quiz_active(self):
         curr_config = current_config(self)
         current_time=datetime.datetime.now().replace(tzinfo=utc)  
