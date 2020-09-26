@@ -179,8 +179,6 @@ class facebooklogin(APIView):
             idInfo = r.get(url=url, params=parameters).json()
 
             email= idInfo['email']
-            
-            #these are tuple objects with one element. Placing the elements seperately. Else brackets and commas will be included
             name= idInfo['name']
             email = email
             name = name
@@ -188,6 +186,8 @@ class facebooklogin(APIView):
             image= idInfo['picture']['data']['url']
             try:
                 user = User.objects.get(email=email)
+                player=UserScore.objects.filter(user=user)[0]                           #FB profile pic at higher priority than google.
+                player.imgurl = image
             except User.DoesNotExist:
                 user = User()
                 user.username = email
