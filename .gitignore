@@ -9,7 +9,7 @@ db.sqlite3
 .DS_Store
 venv
 .env
-' media'
+media
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
