@@ -188,6 +188,7 @@ class facebooklogin(APIView):
                 user = User.objects.get(email=email)
                 player=UserScore.objects.filter(user=user)[0]                           #FB profile pic at higher priority than google.
                 player.imgurl = image
+                player.save()
             except User.DoesNotExist:
                 user = User()
                 user.username = email
