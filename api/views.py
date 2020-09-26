@@ -30,6 +30,7 @@ utc= pytz.utc
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def leaderboard(request):
     players=UserScore.leaderboard(UserScore)
     serializer=LeaderboardSerializer(players,many=True)
