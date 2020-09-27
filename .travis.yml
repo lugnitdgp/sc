@@ -1,17 +1,25 @@
-language: python
-python:
-  - 3.7
-services:
-  - postgresql
-before_install:
-  - sudo apt-get update
+    language: python # => 1
 
-install:
-  - pip install -U pip wheel
-  - pip install -r requirements.txt
-before_script:
+    python: # => 2
 
-script:
-  - psql -c 'CREATE DATABASE postgres;' -U postgres
-  - [ -f .env ] || (touch .env) && cp .env.example .env
-  - python manage.py test
+      - "3.6"
+
+      
+
+    services: # => 3
+
+      - postgresql
+
+    env: # => 4
+
+      -DJANGO=3.0.5 DB=postgres
+    install: # => 5
+
+      - pip install -r requirements.txt
+
+    before_script: # => 6
+
+      - psql -c 'create database travis_ci_test;' -U postgres
+    script: # => 7
+
+      - python manage.py test
