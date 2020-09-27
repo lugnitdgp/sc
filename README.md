@@ -1,6 +1,6 @@
 # Screencast
 
-![Python Versions](https://img.shields.io/pypi/pyversions/django.svg?style=flat) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Kaustuv942/sc)
+[![Build Status](https://travis-ci.com/Kaustuv942/sc.svg?branch=withoutdockerdeploy)](https://travis-ci.com/Kaustuv942/sc) ![Python Versions](https://img.shields.io/pypi/pyversions/django.svg?style=flat) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Kaustuv942/sc)
 
 ![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg) ![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)
 
