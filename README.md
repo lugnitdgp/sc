@@ -1,11 +1,18 @@
-# Screencast
+<p align="center">
+  <a href="https://scapi.trennds.com/api/status">
+    <img alt="logo" src="screencastlogo.png" width="150" />
+  </a>
+</p>
+<h1 align="center">
+  SCREENCAST Backend
+</h1>
+
 
 [![Build Status](https://travis-ci.com/Kaustuv942/sc.svg?branch=withoutdockerdeploy)](https://travis-ci.com/Kaustuv942/sc) ![PyPI - Django Version](https://img.shields.io/pypi/djversions/djangorestframework) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Kaustuv942/sc) ![Website](https://img.shields.io/website?url=https%3A%2F%2Fscapi.trennds.com%2Fapi%2F)
 
 ![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg) ![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)
 
 
-A quiz app ready for production.
 
 ## Build Setup
 
