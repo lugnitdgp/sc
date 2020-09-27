@@ -1,0 +1,17 @@
+language: python
+python:
+  - 3.7
+services:
+  - postgresql
+before_install:
+  - sudo apt-get update
+
+install:
+  - pip install -U pip wheel
+  - pip install -r requirements.txt
+before_script:
+
+script:
+  - psql -c 'CREATE DATABASE postgres;' -U postgres
+  - [ -f .env ] || (touch .env) && cp .env.example .env
+  - python manage.py test

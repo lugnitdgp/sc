@@ -10,29 +10,15 @@ A quiz app ready for production.
 ## Build Setup
 
 ```bash
-#creating virtual env
-mkdir project
-cd project
-virtualenv venv
-source venv/bin/activate
 
 #clone the directory
 git clone https://github.com/Kaustuv942/sc.git
 
-#change directory
-cd sc
-
-#Install dependencies
-pip install -r requirements.txt
 ```
 #### Initialize postgres
 
 [Click here for more detail ](https://stackoverflow.com/questions/1471571/how-to-configure-postgresql-for-the-first-time)
 ```bash
-#Make migrations
-python manage.py makemigrations
-python manage.py migrate
-
-#Run server
-python manage.py runserver
+#Run script
+cd scripts && chmod +x build.sh &&  ./build.sh 
 ```
