@@ -23,14 +23,14 @@ class Question(models.Model):
         ordering=['day','question_no']
 
     def check_ans(self,answer,question):
-        string = question[0].answer.lower()             #the actual answer is stored here
-        answer = answer.lower()                         #answer given by player is stored here
-        answer=answer.replace(" ","")                   #spaces removed from user given answer
-        answers=string.split(",")                       #answers now contains all the probable answers(yes, more than one answers are possible)
+        string = question[0].answer.lower()                         #the actual answer is stored here
+        answer = answer.lower()                                     #answer given by player is stored here
+        answer=answer.replace(" ","")                               #spaces removed from user given answer
+        answers=string.split(",")                                   #answers now contains all the probable answers(yes, more than one answers are possible)
         for ans in answers:
-            z=ans.replace(" ","")                       #each ans's spaces removed and compared against user's given answer
+            z=ans.replace(" ","")                                   #each ans's spaces removed and compared against user's given answer
             if answer==z:       
-                return True                             #if atleast one of them matches, it gives correct ans; else false
+                return True                                         #if atleast one of them matches, it gives correct ans; else false
         return False
     def get_next_question(self,day,qno):
         question=self.objects.filter(day=day,question_no=qno)
@@ -45,7 +45,7 @@ class UserScore(models.Model):
     rank=models.IntegerField(null=True)
     today = models.IntegerField(default=1)
     current_question=models.IntegerField()
-    last_modified=models.DateTimeField(auto_now=True)
+    last_modified=models.DateTimeField(auto_now=False)
     
     def __str__(self):
         return "{}-{}-Day{}-Score-{}".format(self.rank, self.name,self.today, self.score)
@@ -56,15 +56,15 @@ class UserScore(models.Model):
 
         players=self.objects.all()
         rank=1
-        for player in players:              #rank is decided by meta, score then last correct submission
+        for player in players:                                      #rank is decided by meta, score then last correct submission
             player.rank=rank
             rank +=1
-            player.save()
-        return players
+            player.save()                                           #This line makes all last modified to -> way the leaderboard is made. 
+        return players                                              #Definitely not recommended. Solu: make custom save function/ date time field must be changed to auto_now = False
 
     def new_score(self,player):
         
-        player.score+=10                    # 10 added
+        player.score+=10                                            # 10 added
         curr_config = config.current_config(config)
         curr_question=player.current_question
         if curr_config.q_no == curr_question:
@@ -72,6 +72,7 @@ class UserScore(models.Model):
             player.today = curr_config.current_day +1               #to the next day, questions ptr is shifted to
         else:
             player.current_question += 1                            #else the questions ptr is shifted forward by one 
+        last_modified =datetime.datetime.now().replace(tzinfo=utc)
         player.save()
 
 
@@ -87,9 +88,9 @@ class config(models.Model):
     def current_config(self):
 
         configs= self.objects.all()
-        # arr = [[config]*(no of instances of each day)]* no of days
+                                                                    # arr = [[config]*(no of instances of each day)]* no of days
         arr=[]
-        arr = [0 for i in range(10)]      #initialized 10 days with 0 instances of each
+        arr = [0 for i in range(10)]                                #initialized 10 days with 0 instances of each
         cnt = 1
         for con in configs:
             curr_day = con.current_day
@@ -97,7 +98,7 @@ class config(models.Model):
             cnt = max(curr_day, cnt)       
         list_of_configs = []        
         new = []
-        for i in range(1,cnt+1):         #This is like a vector of vectors with ith day config in list[i] vector. So we basically choose 1 out of each day,
+        for i in range(1,cnt+1):                                    #This is like a vector of vectors with ith day config in list[i] vector. So we basically choose 1 out of each day,
             for j in configs:
                 curr_day = j.current_day
                 if curr_day == i:
@@ -107,7 +108,10 @@ class config(models.Model):
 
         maxi = datetime.datetime.now().replace(tzinfo=utc)
         choice = None
-        default_choice = configs[0]
+        if len(configs) == 0: 
+            default_choice = None
+        else: 
+            default_choice = configs[0]
         for i in list_of_configs:
             
             maxi = datetime.datetime.now().replace(tzinfo=utc)
@@ -115,20 +119,20 @@ class config(models.Model):
                 default_choice = j
                 quiz_endtime = j.quiz_endtime.replace(tzinfo=utc)
                 
-                if maxi < quiz_endtime:                 #the config with the maximum endtime is chosen incase of a clash
+                if maxi < quiz_endtime:                             #the config with the maximum endtime is chosen incase of a clash
                     choice = j
                     
                     maxi = quiz_endtime
-            if choice is not None:                      #IMP: if there is a valid config with a lower day it would be given higher priority
+            if choice is not None:                                  #IMP: if there is a valid config with a lower day it would be given higher priority
                 break
-        if choice is None:                              #if there are no configs, the case is handled in quiz_active () function
+        if choice is None:                                          #if there are no configs, the case is handled in quiz_active () function
             choice = default_choice
         curr_config=choice                  
         
         return curr_config
 
     def quiz_active(self):
-        curr_config = self.current_config(self)                         #current valid config is found
+        curr_config = self.current_config(self)                     #current valid config is found
         current_time=datetime.datetime.now().replace(tzinfo=utc)         
         quiz_endtime=curr_config.quiz_endtime.replace(tzinfo=utc)
         print(curr_config.quiz_endtime)

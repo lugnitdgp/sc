@@ -146,7 +146,7 @@ class GoogleLogin(APIView):
             user.password = make_password(BaseUserManager().make_random_password())
             user.email = data['email']
             user.save()
-            score = UserScore(user=user,name=data['name'],imgurl = image, email = user.email, current_question = 1)
+            score = UserScore(user=user,name=data['name'],imgurl = image, email = user.email, current_question = 1, last_modified =datetime.datetime.now().replace(tzinfo=utc))
             score.save()
 
         token = RefreshToken.for_user(user)  # generate token without username & password
@@ -187,16 +187,16 @@ class facebooklogin(APIView):
             try:
                 user = User.objects.get(email=email)
                 player=UserScore.objects.filter(user=user)[0]                           #FB profile pic at higher priority than google.
-                player.imgurl = image
-                player.save()
-            except User.DoesNotExist:
+                player.imgurl = image                                                   #However this generates an issue: Anyone who swtiches to fb from google
+                player.save()                                                           #have his last modified time, changed to now(). So he might lose a couple   
+            except User.DoesNotExist:                                                   #places on the leaderboard. Solution: Make a custom save option/ Change auto_now= false
                 user = User()
                 user.username = email
                 user.email = email
                 # provider random default password
                 user.password = make_password(BaseUserManager().make_random_password())
                 user.save()
-                score = UserScore(user=user,name=name,imgurl= image, email = user.email, current_question = 1)
+                score = UserScore(user=user,name=name,imgurl= image, email = user.email, current_question = 1, last_modified =datetime.datetime.now().replace(tzinfo=utc))
                 score.save()
 
         token = RefreshToken.for_user(user)  # generate token without username & password
