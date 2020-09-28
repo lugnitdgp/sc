@@ -169,9 +169,9 @@ class GoogleLogin(APIView):
                 response['quiz_finished']= True
             else:
                 response['quiz_finished']= False 
-        #end 
         else:
             response['error'] = "No active quizes"
+        #end 
         return Response(response)
 
 
@@ -221,5 +221,21 @@ class facebooklogin(APIView):
         response['access_token'] = str(token.access_token)
         response['refresh_token'] = str(token)
         response['image']= image[0]
+        #adding quiz_finished tag for users who have finished the level
+        user = User.objects.get(email=data['email'])
+        player=UserScore.objects.filter(user=user)[0]
+        active=config.quiz_active(config)
+        curr_config = config.current_config(config)        
+        if active:
+            day=curr_config.current_day
+            curr_day =player.today
+            curr_question=player.current_question
+            if curr_day>day:
+                response['quiz_finished']= True
+            else:
+                response['quiz_finished']= False 
+        else:
+            response['error'] = "No active quizes"
+        #end 
         return Response(response)
         
