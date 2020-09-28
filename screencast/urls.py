@@ -33,4 +33,5 @@ else:
         path('api/',include('api.urls')),
         path('api/auth/oauth', include('rest_framework_social_oauth2.urls')),
     ]
+    urlpatterns +=  static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
