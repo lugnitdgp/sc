@@ -133,12 +133,14 @@ class config(models.Model):
 
     def quiz_active(self):
         curr_config = self.current_config(self)                     #current valid config is found
-        current_time=datetime.datetime.now().replace(tzinfo=utc)         
+        if curr_config is None:
+            return False                                            
+        current_time=datetime.datetime.now().replace(tzinfo=utc)    #No config in the DB     
         quiz_endtime=curr_config.quiz_endtime.replace(tzinfo=utc)
         print(curr_config.quiz_endtime)
         print(current_time)  
-        if current_time>quiz_endtime:                                   #if the valid config's time endtime is yet to come, then its an active quiz. The starttime value is 
-            curr_config.quiz_active=False                               #compared in the frontend. 
+        if current_time>quiz_endtime:                               #if the valid config's time endtime is yet to come, then its an active quiz. The starttime value is 
+            curr_config.quiz_active=False                           #compared in the frontend. 
             print(current_time>quiz_endtime)
             return False
         return True
