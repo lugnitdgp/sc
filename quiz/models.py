@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 import datetime
 import pytz
 from pytz import timezone
+from django.core.cache import cache
 utc= pytz.utc
 # Create your models here.
 
@@ -53,13 +54,17 @@ class UserScore(models.Model):
         ordering =['-score','last_modified']
 
     def leaderboard(self):
-
+        val = cache.get('lboard')                                   #Checking if leaderboard cache exists.
+        if val is not None:                                         #Then it would be returned else, the whole function runs
+            print('data fetched from cache')
+            return val
         players=self.objects.all()
         rank=1
         for player in players:                                      #rank is decided by meta, score then last correct submission
             player.rank=rank
             rank +=1
             player.save()                                           #This line makes all last modified to -> way the leaderboard is made. 
+        cache.set('lboard', players, 10800) 
         return players                                              #Definitely not recommended. Solu: make custom save function/ date time field must be changed to auto_now = False
 
     def new_score(self,player):
@@ -74,6 +79,15 @@ class UserScore(models.Model):
             player.current_question += 1                            #else the questions ptr is shifted forward by one 
         last_modified =datetime.datetime.now().replace(tzinfo=utc)
         player.save()
+
+    def lboardSave(self):
+        players=self.objects.all()
+        rank=1
+        for x in players:                                      #rank is decided by meta, score then last correct submission
+            x.rank=rank
+            rank +=1
+            x.save()
+        cache.set('lboard', players, 10800)                            #Leaderboard Cache populated. The cache is updated everytime there is a change in score of a user
 
 
 class config(models.Model):
