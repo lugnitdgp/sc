@@ -34,7 +34,7 @@ else:
         path('admin/', admin.site.urls),
         path('api/',include('api.urls')),
         path('api/auth/oauth', include('rest_framework_social_oauth2.urls')),
-        
+        path('', include('quiz.urls')),
     ]
     urlpatterns +=  static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
