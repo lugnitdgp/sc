@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://scapi.trennds.com/api">
+  <a href="https://scapi.trennds.com/">
     <img alt="logo" src="screencastlogo.png" width="150" />
   </a>
 </p>
