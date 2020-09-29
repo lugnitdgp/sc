@@ -4,5 +4,5 @@ from django.shortcuts import render
 
 def index(request):
     print('ok')
-    return render(request, 'home.html')
-    
+    # return render(request, 'home.html')
+    return ("ok")
