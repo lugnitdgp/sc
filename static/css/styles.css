@@ -11,7 +11,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: #131313;
+  background: #271c31;
 }
 
 .container {
@@ -157,9 +157,9 @@ body {
 }
 
 .container .card .contentBox .type span:nth-child(1){
-  color: #fb9d56
+  color: #31afdd
 }
 
 .container .card .contentBox .type span:nth-child(2){
-  color: #286cca
+  color: #ca6128
 }
