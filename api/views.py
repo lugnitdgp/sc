@@ -151,7 +151,6 @@ class GoogleLogin(APIView):
             score.save()
 
         token = RefreshToken.for_user(user)  # generate token without username & password
-        user.
         response = {}
         response['username'] = user.username
         response['access_token'] = str(token.access_token)
