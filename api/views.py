@@ -151,6 +151,7 @@ class GoogleLogin(APIView):
             score.save()
 
         token = RefreshToken.for_user(user)  # generate token without username & password
+        user.
         response = {}
         response['username'] = user.username
         response['access_token'] = str(token.access_token)
@@ -223,7 +224,6 @@ class facebooklogin(APIView):
         response['refresh_token'] = str(token)
         response['image']= image[0]
         #adding quiz_finished tag for users who have finished the level
-        user = User.objects.get(email=data['email'])
         player=UserScore.objects.filter(user=user)[0]
         active=config.quiz_active(config)
         curr_config = config.current_config(config)        
