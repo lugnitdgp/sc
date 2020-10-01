@@ -96,8 +96,19 @@ class config(models.Model):
     quiz_active=models.BooleanField(default=True)
     quiz_start=models.DateTimeField()
     quiz_endtime=models.DateTimeField()
+    class Meta:
+        ordering =['-current_day','quiz_endtime']
     def __str__(self):
-        return "Day-{}".format(self.current_day)
+        active = config.current_config(config)
+        s= ""
+        z= ""
+        if self.quiz_endtime.replace(tzinfo=utc)< datetime.datetime.now().replace(tzinfo=utc):
+            z = "-expired"
+        if self== active:
+            s = "-ONLINE"
+            if z=="-expired":
+                s="-Current Config"
+        return "Day-{} {}{}".format(self.current_day,s,z)
 
     def current_config(self):
 
