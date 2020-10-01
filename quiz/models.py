@@ -106,6 +106,8 @@ class config(models.Model):
             z = "-expired"
         if self== active:
             s = "-ONLINE"
+            if z=="-expired":
+                s="-Current Config"
         return "Day-{} {}{}".format(self.current_day,s,z)
 
     def current_config(self):
