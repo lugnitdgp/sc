@@ -156,6 +156,8 @@ class GoogleLogin(APIView):
         response['access_token'] = str(token.access_token)
         response['refresh_token'] = str(token)
         response['image'] = str(image)
+        #register on leaderboard
+        z = UserScore.leaderboard(UserScore)
 
         #adding quiz_finished tag for users who have finished the level
         user = User.objects.get(email=data['email'])
@@ -222,6 +224,7 @@ class facebooklogin(APIView):
         response['access_token'] = str(token.access_token)
         response['refresh_token'] = str(token)
         response['image']= image[0]
+        z = UserScore.leaderboard(UserScore)
         #adding quiz_finished tag for users who have finished the level
         player=UserScore.objects.filter(user=user)[0]
         active=config.quiz_active(config)
