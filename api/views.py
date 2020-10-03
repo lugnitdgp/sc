@@ -149,6 +149,7 @@ class GoogleLogin(APIView):
             user.save()
             score = UserScore(user=user,name=data['name'],imgurl = image, email = user.email, current_question = 1, last_modified =datetime.datetime.now().replace(tzinfo=utc))
             score.save()
+            z = UserScore.lboardSave(UserScore)
 
         token = RefreshToken.for_user(user)  # generate token without username & password
         response = {}
@@ -157,7 +158,7 @@ class GoogleLogin(APIView):
         response['refresh_token'] = str(token)
         response['image'] = str(image)
         #register on leaderboard
-        z = UserScore.lboardSave(UserScore)
+        
 
         #adding quiz_finished tag for users who have finished the level
         user = User.objects.get(email=data['email'])
@@ -217,6 +218,7 @@ class facebooklogin(APIView):
                 user.save()
                 score = UserScore(user=user,name=name,imgurl= image, email = user.email, current_question = 1, last_modified =datetime.datetime.now().replace(tzinfo=utc))
                 score.save()
+                z = UserScore.lboardSave(UserScore)
 
         token = RefreshToken.for_user(user)  # generate token without username & password
         response = {}
@@ -224,7 +226,7 @@ class facebooklogin(APIView):
         response['access_token'] = str(token.access_token)
         response['refresh_token'] = str(token)
         response['image']= image[0]
-        z = UserScore.lboardSave(UserScore)
+        
         #adding quiz_finished tag for users who have finished the level
         player=UserScore.objects.filter(user=user)[0]
         active=config.quiz_active(config)
