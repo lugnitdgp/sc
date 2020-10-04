@@ -77,7 +77,7 @@ class UserScore(models.Model):
             player.today = curr_config.current_day +1               #to the next day, questions ptr is shifted to
         else:
             player.current_question += 1                            #else the questions ptr is shifted forward by one 
-        last_modified =datetime.datetime.now().replace(tzinfo=utc)
+        player.last_modified =datetime.datetime.now().replace(tzinfo=utc)
         player.save()
 
     def lboardSave(self):
