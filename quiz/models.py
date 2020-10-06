@@ -96,7 +96,7 @@ class config(models.Model):
     quiz_active=models.BooleanField(default=True)
     quiz_start=models.DateTimeField()
     quiz_endtime=models.DateTimeField()
-    points=models.IntegerField()
+    points=models.IntegerField(default=10)
     class Meta:
         ordering =['-current_day','quiz_endtime']
     def __str__(self):
