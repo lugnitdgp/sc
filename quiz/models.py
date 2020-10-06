@@ -69,8 +69,8 @@ class UserScore(models.Model):
 
     def new_score(self,player):
         
-        player.score+=10                                            # 10 added
         curr_config = config.current_config(config)
+        player.score+=curr_config.points                                            # points from config added
         curr_question=player.current_question
         if curr_config.q_no == curr_question:
             player.current_question = 1                             #if the max no. of questions are reached for the day, then ptr is moved
@@ -96,6 +96,7 @@ class config(models.Model):
     quiz_active=models.BooleanField(default=True)
     quiz_start=models.DateTimeField()
     quiz_endtime=models.DateTimeField()
+    points=models.IntegerField(default=10)
     class Meta:
         ordering =['-current_day','quiz_endtime']
     def __str__(self):
