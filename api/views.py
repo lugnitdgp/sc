@@ -27,11 +27,11 @@ from django.core.exceptions import ObjectDoesNotExist
 import requests as r
 import pytz
 from pytz import timezone
-from decouple import config
+from decouple import config as configure
 utc= pytz.utc
 
 def verifyGoogleToken(token):
-    CLIENT_ID = config('CLIENT_ID', cast=str)
+    CLIENT_ID = configure('CLIENT_ID', cast=str)
     try:
         idinfo = id_token.verify_oauth2_token(
             token, requests.Request(), CLIENT_ID)
@@ -94,7 +94,8 @@ def configstatus(request):
        response={
        "current_day":choice.current_day,
        "start_time":choice.quiz_start.replace(tzinfo=utc),
-       "end_time":choice.quiz_endtime.replace(tzinfo=utc)  
+       "end_time":choice.quiz_endtime.replace(tzinfo=utc),
+       "round_questions": choice.q_no    
        }
        return Response(response)
     response={
