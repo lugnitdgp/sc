@@ -4,7 +4,6 @@ from django.contrib.auth.hashers import make_password
 from rest_framework.utils import json
 from rest_framework.views import APIView
 from rest_framework.response import Response
-import requests
 from django.http import JsonResponse
 from rest_framework import generics, permissions, status, views
 from rest_framework.response import Response
@@ -21,14 +20,34 @@ from social_core.backends.oauth import BaseOAuth2
 from social_core.exceptions import MissingBackend, AuthTokenError, AuthForbidden
 import time
 import datetime
+from google.auth.transport import requests
+from google.oauth2 import id_token
+from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
 import requests as r
 import pytz
 from pytz import timezone
 utc= pytz.utc
 
+def verifyGoogleToken(token):
+    CLIENT_ID = config('CLIENT_ID', cast=str)
+    try:
+        idinfo = id_token.verify_oauth2_token(
+            token, requests.Request(), CLIENT_ID)
 
+        if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
+            raise ValueError('Wrong issuer.')
 
+        return {
+            "email": idinfo['email'],
+            "username": idinfo['email'],
+            "first_name": idinfo['name'],
+            "image": idinfo['picture'],
+            "status": 200
+        }
+    except ValueError:
+        return {"status": 404, "message": "Your Token has expired. Please login/register again!"}
+    
 @api_view(['GET'])
 def leaderboard(request):
     players=UserScore.leaderboard(UserScore)
@@ -82,6 +101,7 @@ def configstatus(request):
         "message":"no configs found"
     }
     return Response(response)
+
 class Answer(APIView):
     permission_classes=(IsAuthenticated,)
     
@@ -126,28 +146,27 @@ class Answer(APIView):
                 "error":"quiz has ended"
             }
         return Response(response)
+    
 class GoogleLogin(APIView):
     def post(self, request):
-        payload = {'access_token': request.data.get("token")}  # validate the token
-        r = requests.get('https://www.googleapis.com/oauth2/v2/userinfo', params=payload)
-        data = json.loads(r.text)
-
-        if 'error' in data:
-            content = {'message': 'wrong google token / this google token is already expired.'}
-            return Response(content)
-
-        # create user if not exist
-        image = data['picture']
+        res = verifyGoogleToken(request.data.get('token'))
+        if res['status'] == 404:
+            return Response({
+                "status": 404,
+                "message": "Token expired."
+            })
+        else:
+            if
         try:
             user = User.objects.get(email=data['email'])
         except User.DoesNotExist:
             user = User()
-            user.username = data['email']
+            user.username = res['email']
             # provider random default password
             user.password = make_password(BaseUserManager().make_random_password())
-            user.email = data['email']
+            user.email = res['email']
             user.save()
-            score = UserScore(user=user,name=data['name'],imgurl = image, email = user.email, current_question = 1, last_modified =datetime.datetime.now().replace(tzinfo=utc))
+            score = UserScore(user=user,name=res['first_name'],imgurl = res['image'], email = user.email, current_question = 1, last_modified =datetime.datetime.now().replace(tzinfo=utc))
             score.save()
             z = UserScore.lboardSave(UserScore)
 
@@ -156,12 +175,11 @@ class GoogleLogin(APIView):
         response['username'] = user.username
         response['access_token'] = str(token.access_token)
         response['refresh_token'] = str(token)
-        response['image'] = str(image)
+        response['image'] = str(res['image'])
         #register on leaderboard
         
 
         #adding quiz_finished tag for users who have finished the level
-        user = User.objects.get(email=data['email'])
         player=UserScore.objects.filter(user=user)[0]
         active=config.quiz_active(config)
         curr_config = config.current_config(config)        
