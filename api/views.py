@@ -27,6 +27,7 @@ from django.core.exceptions import ObjectDoesNotExist
 import requests as r
 import pytz
 from pytz import timezone
+from decouple import config
 utc= pytz.utc
 
 def verifyGoogleToken(token):
@@ -155,10 +156,8 @@ class GoogleLogin(APIView):
                 "status": 404,
                 "message": "Token expired."
             })
-        else:
-            if
         try:
-            user = User.objects.get(email=data['email'])
+            user = User.objects.get(email=res['email'])
         except User.DoesNotExist:
             user = User()
             user.username = res['email']
