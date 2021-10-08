@@ -26,8 +26,8 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')])
-
+#ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')])
+ALLOWED_HOSTS =['*']
 
 # Application definition
 
@@ -99,11 +99,11 @@ CORS_ORIGIN_ALLOW_ALL = True
 DATABASES = {        
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': config('DB_PASSWORD'),
-        # 'HOST': 'localhost',
-        # 'PORT': '5432',
+        'NAME': 'scdata',
+        'USER': 'scback',
+        'PASSWORD': config('SQL_PASSWORD'),
+        'HOST': 'db',
+        'PORT': '5432',
     }
 }
  
@@ -173,7 +173,7 @@ CACHES = {
     "default": 
     { 
         "BACKEND": "django_redis.cache.RedisCache", 
-        "LOCATION": "redis://127.0.0.1:6379/1", 
+        "LOCATION": "redis://redis:6379/1", 
         "OPTIONS": { 
             "CLIENT_CLASS": "django_redis.client.DefaultClient", 
         } 

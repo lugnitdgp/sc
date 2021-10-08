@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+   # command: #gunicorn screencast.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/usr/src/sc/
+      - static:/usr/src/sc/static/
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env.dev
+    depends_on:
+      - db
+  db:
+    image: postgres:13.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=scback
+      - POSTGRES_PASSWORD=postscbackend
+      - POSTGRES_DB=scdata
+  redis:
+    container_name: 'redis'
+    image: 'redis:3.2.0'
+    ports:
+      - '6379:6379'
+    volumes:
+      - 'redisdata:/data'
+
+  nginx :
+    build : ./nginx
+    volumes:
+      - .:/sc
+      - static:/sc/static
+    ports: 
+      - "80:80"
+    depends_on: 
+      - web
+      - db
+volumes:
+  postgres_data:
+  static:
+  redisdata:
