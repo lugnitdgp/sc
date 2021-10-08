@@ -42,4 +42,4 @@ sudo docker-compose stop
 ```bash
 sudo docker-compose down -v
 ```
-
+!!!warning:for development only use .env.dev change the secrets before an actual deployment
