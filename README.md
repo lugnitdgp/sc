@@ -25,3 +25,21 @@ git clone https://github.com/Kaustuv942/sc.git
 #Run script
 cd scripts && chmod +x build.sh &&  ./build.sh 
 ```
+## Docker Build
+
+```bash 
+sudo docker-compose up -d --build
+sudo docker exec -it [web_container_name] python manage.py createsuperuser
+```
+#### Stopping the container
+
+``` bash
+sudo docker-compose stop
+```
+
+#### removing the volumes and the container
+
+```bash
+sudo docker-compose down -v
+```
+
