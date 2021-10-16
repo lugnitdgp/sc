@@ -135,7 +135,6 @@ class Answer(APIView):
             quiz_ended=False
             if result:
                player.new_score(player)
-               question.people_who_answered.add(player.user)
                UserScore.lboardSave(UserScore)
                curr_day =player.today 
                if curr_day > curr_config.current_day:
