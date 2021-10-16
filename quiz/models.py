@@ -17,6 +17,7 @@ class Question(models.Model):
     audio=models.FileField(upload_to='media/audios',blank=True)
     image=models.ImageField(upload_to='media/images',blank=True)
     hint=models.CharField(max_length=555,default='N/A')
+    #people_who_answered=models.ManyToManyField(User)
     def __str__(self):
         return "Day-{}-Q-{} : {}".format(self.day, self.question_no, self.question)
 

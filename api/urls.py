@@ -18,4 +18,5 @@ urlpatterns = [
     path('question',views.getquestion.as_view(),name='question api'),
     path('facebooklogin',views.facebooklogin.as_view(),name='facebooklogin'),
     path('status',views.configstatus,name='quiz_status'),
+    path('timeline',views.TimelineData.as_view(),name='timeline_api'),
 ]
