@@ -102,7 +102,7 @@ DATABASES = {
         'NAME': 'scdata',
         'USER': 'scback',
         'PASSWORD': config('SQL_PASSWORD'),
-        'HOST': 'db',
+        'HOST': 'db',                          #change to 'HOST':'db'- for docker / in local development change it to 'localhost'
         'PORT': '5432',
     }
 }
@@ -173,6 +173,7 @@ CACHES = {
     "default": 
     { 
         "BACKEND": "django_redis.cache.RedisCache", 
+        #"LOCATION": "redis://127.0.0.1:6379/1",         #
         "LOCATION": "redis://redis:6379/1", 
         "OPTIONS": { 
             "CLIENT_CLASS": "django_redis.client.DefaultClient", 

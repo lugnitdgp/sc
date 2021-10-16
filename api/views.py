@@ -26,6 +26,7 @@ from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
 import requests as r
 import pytz
+from django.db.models import Q
 from pytz import timezone
 from decouple import config as configure
 utc= pytz.utc
@@ -134,6 +135,7 @@ class Answer(APIView):
             quiz_ended=False
             if result:
                player.new_score(player)
+               question.people_who_answered.add(player.user)
                UserScore.lboardSave(UserScore)
                curr_day =player.today 
                if curr_day > curr_config.current_day:
@@ -262,3 +264,38 @@ class facebooklogin(APIView):
         #end 
         return Response(response)
         
+    
+class TimelineData(APIView):
+    permission_classes=(IsAuthenticated,)
+
+    def get(self,request):
+        player=UserScore.objects.filter(user=request.user)[0]
+        active=config.quiz_active(config)
+        curr_config = config.current_config(config)
+        if active:
+            day= curr_config.current_day
+            curr_day=player.today
+            curr_question=player.current_question
+            if curr_day > curr_config.current_day:             
+                response={
+                  "quiz_finished": True
+                }
+                return Response(response)
+            if curr_day<day:                             #IMP: this is done so that for users who haven't completed the last day's task completely
+                player.today = day                       #The ptr on current question is shifted to 1 and the day is shifted to whatever the present day is.
+                player.current_question = 1              #EDGE CASE: ERROR if there are only 1 question in a round. 
+                curr_day =player.today
+                curr_question=player.current_question
+                player.save()
+            
+            ##question=Question.objects.filter(day=day,question_no=curr_question)[0]
+            #serializer=QuestionSerializer(question)
+            response={
+                'current_question':curr_question
+            }
+            return Response(response)
+        else:
+            response= {
+                "error":"quiz has ended"
+            }
+            return Response(response)
