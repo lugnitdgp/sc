@@ -135,7 +135,6 @@ class Answer(APIView):
             quiz_ended=False
             if result:
                player.new_score(player)
-               question.people_who_answered.add(player.user)
                UserScore.lboardSave(UserScore)
                curr_day =player.today 
                if curr_day > curr_config.current_day:
@@ -272,6 +271,12 @@ class TimelineData(APIView):
         player=UserScore.objects.filter(user=request.user)[0]
         active=config.quiz_active(config)
         curr_config = config.current_config(config)
+        current_time=datetime.datetime.now().replace(tzinfo=utc)
+        if current_time < curr_config.quiz_start.replace(tzinfo=utc):
+            response = {
+                "quiz_started":False
+            }
+            return Response(response)
         if active:
             day= curr_config.current_day
             curr_day=player.today
