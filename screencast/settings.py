@@ -101,8 +101,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'scdata',
         'USER': 'scback',
-        'PASSWORD': config('SQL_PASSWORD'),
-        'HOST': 'db',                          #change to 'HOST':'db'- for docker / in local development change it to 'localhost'
+        'PASSWORD':'scprince@123',
+        'HOST': 'localhost',                          #change to 'HOST':'db'- for docker / in local development change it to 'localhost'
         'PORT': '5432',
     }
 }
