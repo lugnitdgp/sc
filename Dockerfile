@@ -1,5 +1,8 @@
 # pull official base image
 FROM python:3.7-slim-buster
+RUN apt-get update \
+    && apt-get -y install libpq-dev gcc \
+    && pip install psycopg2
 
 # set work directory
 WORKDIR /usr/src/sc
