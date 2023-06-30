@@ -102,7 +102,7 @@ DATABASES = {
         'NAME': 'scdata',
         'USER': 'scback',
         'PASSWORD': config('SQL_PASSWORD'),
-        'HOST': 'localhost',                          #change to 'HOST':'db'- for docker / in local development change it to 'localhost'
+        'HOST': 'db',                          #change to 'HOST':'db'- for docker / in local development change it to 'localhost'
         'PORT': '5432',
     }
 }
