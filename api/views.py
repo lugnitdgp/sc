@@ -20,7 +20,6 @@ from social_core.backends.oauth import BaseOAuth2
 from social_core.exceptions import MissingBackend, AuthTokenError, AuthForbidden
 import time
 import datetime
-from datetime import datetime
 
 from google.auth.transport import requests
 from google.oauth2 import id_token
@@ -59,18 +58,16 @@ def leaderboard(request):
     return Response(serializer.data)
     
 class getquestion(APIView):
-    # permission_classes=(IsAuthenticated,)
+    permission_classes=(IsAuthenticated,)
 
     def get(self,request):
-        # player=UserScore.objects.filter(user=request.user)[0]
-        player=UserScore.objects.get(id=1)
+        player=UserScore.objects.filter(user=request.user)[0]
+        # player=UserScore.objects.get(id=1)
         active=config.quiz_active(config)
-        curr_system_time = datetime.now()          
-        curr_system_time = curr_system_time.strftime("%Y-%m-%d %H:%M:%S")
-        curr_system_time = datetime.strptime(curr_system_time, "%Y-%m-%d %H:%M:%S")
-    
+        curr_system_time = datetime.datetime.now()   # Getting current datetime from the system       
+        curr_system_time = curr_system_time.strftime("%Y-%m-%d %H:%M:%S") # Converting current datetime to our desired format
+        curr_system_time = datetime.datetime.strptime(curr_system_time, "%Y-%m-%d %H:%M:%S") # Converting the datetime string to a datetime object
         curr_config = config.current_config(config)
-       
         if (curr_system_time<curr_config.quiz_start):
             response = {
                 "error":"quiz has not started yet"
