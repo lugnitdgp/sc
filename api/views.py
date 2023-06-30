@@ -23,6 +23,7 @@ import datetime
 from datetime import datetime
 import pytz    # $ pip install pytz
 import tzlocal # $ pip install tzlocal
+from urllib3 import urlopen
 from google.auth.transport import requests
 from google.oauth2 import id_token
 from django.core.exceptions import ObjectDoesNotExist
@@ -66,7 +67,9 @@ class getquestion(APIView):
         # player=UserScore.objects.filter(user=request.user)[0]
         player=UserScore.objects.get(id=1)
         active=config.quiz_active(config)
-        
+        local_timezone = tzlocal.get_localzone() # get pytz tzinfo
+        utc_time = datetime.strptime("2011-01-21 02:37:21", "%Y-%m-%d %H:%M:%S")
+        local_time = utc_time.replace(tzinfo=pytz.utc).astimezone(local_timezone)
         curr_config = config.current_config(config)
         print(curr_config.quiz_start)
         print(curr_config.quiz_endtime)
