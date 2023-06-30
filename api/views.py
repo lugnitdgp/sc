@@ -65,15 +65,24 @@ class getquestion(APIView):
         # player=UserScore.objects.filter(user=request.user)[0]
         player=UserScore.objects.get(id=1)
         active=config.quiz_active(config)
-        curr_system_time = datetime.now()
-        print("hello")
-        
+        curr_system_time = datetime.now()          
         curr_system_time = curr_system_time.strftime("%Y-%m-%d %H:%M:%S")
-        print(curr_system_time)
+        curr_system_time = datetime.strptime(curr_system_time, "%Y-%m-%d %H:%M:%S")
+    
         curr_config = config.current_config(config)
-        
-        # print(curr_config.quiz_start)
-        # print(curr_config.quiz_endtime)
+       
+        if (curr_system_time<curr_config.quiz_start):
+            response = {
+                "error":"quiz has not started yet"
+            }
+            return Response(response)
+        if (curr_system_time>curr_config.quiz_endtime):
+            response = {
+                "error":"quiz has ended"
+            }
+            return Response(response)
+        print(curr_config.quiz_start)
+        print(curr_config.quiz_endtime)
         if active:
             day= curr_config.current_day
             curr_day=player.today
