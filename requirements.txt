@@ -33,3 +33,5 @@ urllib3==1.25.9
 whitenoise==5.1.0
 python-decouple==3.3
 django-redis==4.12.1
+pytz==2023.3
+tzlocal=5.0.1

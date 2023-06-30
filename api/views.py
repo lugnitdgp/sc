@@ -20,6 +20,9 @@ from social_core.backends.oauth import BaseOAuth2
 from social_core.exceptions import MissingBackend, AuthTokenError, AuthForbidden
 import time
 import datetime
+from datetime import datetime
+import pytz    # $ pip install pytz
+import tzlocal # $ pip install tzlocal
 from google.auth.transport import requests
 from google.oauth2 import id_token
 from django.core.exceptions import ObjectDoesNotExist
@@ -57,12 +60,16 @@ def leaderboard(request):
     return Response(serializer.data)
     
 class getquestion(APIView):
-    permission_classes=(IsAuthenticated,)
+    # permission_classes=(IsAuthenticated,)
 
     def get(self,request):
-        player=UserScore.objects.filter(user=request.user)[0]
+        # player=UserScore.objects.filter(user=request.user)[0]
+        player=UserScore.objects.get(id=1)
         active=config.quiz_active(config)
+        
         curr_config = config.current_config(config)
+        print(curr_config.quiz_start)
+        print(curr_config.quiz_endtime)
         if active:
             day= curr_config.current_day
             curr_day=player.today
