@@ -20,6 +20,7 @@ from social_core.backends.oauth import BaseOAuth2
 from social_core.exceptions import MissingBackend, AuthTokenError, AuthForbidden
 import time
 import datetime
+
 from google.auth.transport import requests
 from google.oauth2 import id_token
 from django.core.exceptions import ObjectDoesNotExist
@@ -61,8 +62,24 @@ class getquestion(APIView):
 
     def get(self,request):
         player=UserScore.objects.filter(user=request.user)[0]
+        # player=UserScore.objects.get(id=1)
         active=config.quiz_active(config)
+        curr_system_time = datetime.datetime.now()   # Getting current datetime from the system       
+        curr_system_time = curr_system_time.strftime("%Y-%m-%d %H:%M:%S") # Converting current datetime to our desired format
+        curr_system_time = datetime.datetime.strptime(curr_system_time, "%Y-%m-%d %H:%M:%S") # Converting the datetime string to a datetime object
         curr_config = config.current_config(config)
+        if (curr_system_time<curr_config.quiz_start):
+            response = {
+                "error":"quiz has not started yet"
+            }
+            return Response(response)
+        if (curr_system_time>curr_config.quiz_endtime):
+            response = {
+                "error":"quiz has ended"
+            }
+            return Response(response)
+        print(curr_config.quiz_start)
+        print(curr_config.quiz_endtime)
         if active:
             day= curr_config.current_day
             curr_day=player.today

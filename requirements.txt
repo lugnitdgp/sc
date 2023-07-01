@@ -1,6 +1,6 @@
 ﻿asgiref==3.2.7
 certifi==2020.4.5.1
-cffi==1.14.0
+cffi==1.15.1
 chardet==3.0.4
 cryptography==2.9.2
 defusedxml==0.7.0rc1
@@ -12,7 +12,7 @@ django-heroku==0.3.1
 django-oauth-toolkit==1.3.2
 django-rest-framework-social-oauth2==1.1.0
 djangorestframework==3.11.0
-djangorestframework-simplejwt==4.4.0
+djangorestframework-simplejwt==5.1.0
 gunicorn==20.0.4
 google-auth==1.6.3
 idna==2.9
@@ -22,14 +22,14 @@ psycopg2-binary==2.8.5
 pycparser==2.20
 PyJWT==1.7.1
 python3-openid==3.1.0
-pytz==2019.3
+pytz==2023.3
 requests==2.23.0
 requests-oauthlib==1.3.0
 six==1.15.0
 social-auth-app-django==3.4.0
 social-auth-core==3.3.3
 sqlparse==0.3.1
-urllib3==1.25.9
+urllib3==2.0.3
 whitenoise==5.1.0
 python-decouple==3.3
 django-redis==4.12.1
