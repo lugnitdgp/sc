@@ -70,12 +70,12 @@ class getquestion(APIView):
         curr_config = config.current_config(config)
         if (curr_system_time<curr_config.quiz_start):
             response = {
-                "error":"quiz has not started yet"
+                "error":"Wait up HAL, the quiz has not started yet"
             }
             return Response(response)
         if (curr_system_time>curr_config.quiz_endtime):
             response = {
-                "error":"quiz has ended"
+                "error":"You hacked us a little too late, the quiz has already ended"
             }
             return Response(response)
         print(curr_config.quiz_start)
