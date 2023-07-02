@@ -75,7 +75,7 @@ class getquestion(APIView):
             return Response(response)
         if (curr_system_time>curr_config.quiz_endtime):
             response = {
-                "error":"quiz has ended"
+                "error":"You hacked us a little too late, the quiz has already ended"
             }
             return Response(response)
         print(curr_config.quiz_start)
