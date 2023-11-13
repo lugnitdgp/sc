@@ -1,4 +1,4 @@
-FROM nginx
+FROM nginx:1.23
 
 COPY ssl/fullchain.pem /etc/ssl/
 COPY ssl/privkey.pem /etc/ssl/
